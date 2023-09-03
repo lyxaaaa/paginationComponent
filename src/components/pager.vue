@@ -2,7 +2,7 @@
     <ul @click="onPagerClick" @keyup.enter="onEnter" class="o-pagination-pager">
         <li
             v-if="pageCount > 0"
-            class="number"
+            :class="['number',{'activePage' : currentPage === 1}]"
             :aria-current="currentPage === 1"
             :aria-label="t('pagination.currentPage', { pager: 1 })"
             :tabindex="tabindex"
@@ -25,7 +25,7 @@
         <li
             v-for="pager in pagers"
             :key="pager"
-            class="number"
+            :class="['number',{'activePage' : currentPage === pager}]"
             :aria-current="currentPage === pager"
             :aria-label="t('pagination.currentPage', { pager })"
             :tabindex="tabindex"
@@ -47,7 +47,7 @@
         </li>
         <li
             v-if="pageCount > 1"
-            class="number"
+            :class="['number',{'activePage' : currentPage === pageCount}]"
             :aria-current="currentPage === pageCount"
             :aria-label="t('pagination.currentPage', { pager: pageCount })"
             :tabindex="tabindex"
@@ -249,10 +249,18 @@ function onPagerClick(event: UIEvent) {
         text-align: center;
         cursor: pointer;
         box-sizing: border-box;
+        &:hover {
+            color: #ffffff;
+            background-color: #7d32ea;
+        }
         .opagination-icon {
             width: 100%;
             height: 100%;
         }
+    }
+    .activePage {
+        color: #ffffff;
+        background-color: #7d32ea;
     }
 }
 </style>

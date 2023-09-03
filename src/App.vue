@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
     <OPagination
         :total="totalItems"
         :page-sizes="opageSizes"
@@ -10,9 +10,6 @@
         @size-change="handleSizeChange"
     >
     </OPagination>
-    <div>***********</div>
-    <div>currentPage:{{ ocurrentPage }}</div>
-    <div>total:{{ totalItems }}</div>
 </div>
 </template>
 
@@ -46,3 +43,13 @@ export default defineComponent({
 })
 </script>
 
+<style lang="scss" scoped>
+.container {
+    width: 100vw;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f6f8;
+}
+</style>

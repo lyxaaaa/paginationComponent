@@ -19,6 +19,7 @@ function translate(language: Language, key: string): string {
             'pagination.currentPage' : 'currentPage',
             'pagination.prevPages' : 'prevPages',
             'pagination.nextPages' : 'nextPages',
+            'pagination.choose' : 'please choose',
             // 更多英语翻译项...
         },
         zh: {
@@ -31,6 +32,7 @@ function translate(language: Language, key: string): string {
             'pagination.currentPage' : '当前页码',
             'pagination.prevPages' : '前页',
             'pagination.nextPages' : '后页',
+            'pagination.choose' : '请选择',
             // 更多中文翻译项...
         },
         // 更多语言...

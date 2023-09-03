@@ -18,10 +18,9 @@
 import { computed } from 'vue'
 import { useLocale } from '../hooks/useLocale'
 import { paginationNextProps } from './next'
-import ArrowRight from '../assets/icon/ArrowRight.vue'
 
 defineOptions({
-name: 'OPaginationNext',
+    name: 'OPaginationNext',
 })
 
 const props = defineProps(paginationNextProps)
@@ -31,10 +30,10 @@ defineEmits(['click'])
 const { t } = useLocale()
 
 const internalDisabled = computed(
-() =>
-    props.disabled ||
-    props.currentPage === props.pageCount ||
-    props.pageCount === 0
+    () =>
+        props.disabled ||
+        props.currentPage === props.pageCount ||
+        props.pageCount === 0
 )
 </script>
 
@@ -43,6 +42,26 @@ const internalDisabled = computed(
     display: block;
     font-size: 12px;
     font-weight: bold;
-    width: 20px;
+    width: 12px;
+}
+.btn-next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    outline: none;
+    border: none;
+    margin-left: 16px;
+    background-color: #e5e5e5;
+    color: #000000;
+    border-radius: 0px;
+    font-size: 14px;
+    min-width: 32px;
+    padding: 0 4px;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-left: 4px;
 }
 </style>

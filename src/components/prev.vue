@@ -38,6 +38,26 @@ const internalDisabled = computed(
     display: block;
     font-size: 12px;
     font-weight: bold;
-    width: 20px;
+    width: 12px;
+}
+.btn-prev {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    outline: none;
+    border: none;
+    margin-left: 16px;
+    background-color: #e5e5e5;
+    color: #000000;
+    border-radius: 0px;
+    font-size: 14px;
+    min-width: 32px;
+    padding: 0 4px;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin-right: 4px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 <span class="opagination-jump" :disabled="disabled">
-    <span :class="[ns.e('goto')]">{{ t('pagination.goto') }}</span>
+    <span class="opagination-goto">{{ t('pagination.goto') }}</span>
     <div class="opagination-jump-input">
         <div class="opaination-wrapInput">
             <input
@@ -18,7 +18,7 @@
             />
         </div>
     </div>
-    <span :class="[ns.e('classifier')]">{{
+    <span class="opagination-page">{{
         t('pagination.pageClassifier')
     }}</span>
 </span>
@@ -82,6 +82,9 @@ function handleChange(event: Event) {
     border-radius: 0;
     margin-left: 24px;
     color: #999999;
+    .opagination-goto {
+        margin-right: 8px;
+    }
     .opagination-jump-input {
         display: inline-flex;
         justify-content: center !important;
@@ -108,11 +111,12 @@ function handleChange(event: Event) {
             .opagination-innerInput {
                 width: 100%;
                 flex-flow: 1;
+                appearance: none;
                 -webkit-appearance: none;
                 color: #000000;
                 font-size: inherit;
-                height: calc( 32px - 2px);
-                line-height: calc( 32px - 2px);
+                height: 30px;
+                line-height: 30px;
                 padding: 0;
                 outline: none;
                 border: none;
@@ -120,6 +124,9 @@ function handleChange(event: Event) {
                 box-sizing: border-box;
             }
         }
+    }
+    .opagination-page {
+        margin-left: 8px;
     }
 }
 </style>
