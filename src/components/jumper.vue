@@ -1,0 +1,125 @@
+<template>
+<span class="opagination-jump" :disabled="disabled">
+    <span :class="[ns.e('goto')]">{{ t('pagination.goto') }}</span>
+    <div class="opagination-jump-input">
+        <div class="opaination-wrapInput">
+            <input
+                :size="size"
+                class="opagination-innerInput"
+                :min="1"
+                :max="pageCount"
+                :disabled="disabled"
+                :model-value="innerValue"
+                :validate-event="false"
+                :label="t('pagination.page')"
+                type="number"
+                @update:model-value="handleInput"
+                @change="handleChange"
+            />
+        </div>
+    </div>
+    <span :class="[ns.e('classifier')]">{{
+        t('pagination.pageClassifier')
+    }}</span>
+</span>
+</template>
+    
+<script lang="ts" setup>
+import { computed, ref } from 'vue'
+import { useLocale } from '../hooks/useLocale'
+import { useNamespace } from '../hooks/useNamespace'
+import { usePagination } from '../usePagination'
+import { paginationJumperProps } from './jumper'
+
+defineOptions({
+    name: 'OPaginationJumper',
+})
+
+defineProps(paginationJumperProps)
+const { t } = useLocale()
+const ns = useNamespace('pagination')
+const { pageCount, disabled, currentPage, changeEvent } = usePagination()
+const userInput = ref<number | string>()
+let innerValue = computed(() => userInput.value ?? currentPage?.value)
+
+//用户实时输入触发
+function handleInput(val: number | string) {
+    console.log('handleInput',val)
+    userInput.value = val ? +val : ''
+}
+
+//用户按下Enter键 或者 焦点从输入框移开 触发
+function handleChange(event: Event) {
+    let inputValue = (event.target as HTMLInputElement).value
+    const nowPageCount: number = pageCount?.value || 0
+    console.log('handleChange',inputValue,pageCount?.value)
+    let val = Math.trunc(+inputValue)
+    console.log(val,nowPageCount)
+    //边界情况判断
+    if(val > nowPageCount && nowPageCount!==0 ) {
+        val = nowPageCount
+        inputValue = val.toString()
+        console.log('inputValue',inputValue)
+        innerValue = inputValue
+    }
+    if(val < 1 ){
+        val = 1
+        inputValue = val.toString()
+    }
+    changeEvent?.(val)
+    userInput.value = undefined
+}
+</script>
+
+<style lang="scss" scoped>
+.opagination-jump {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 22px;
+    border-radius: 0;
+    margin-left: 24px;
+    color: #999999;
+    .opagination-jump-input {
+        display: inline-flex;
+        justify-content: center !important;
+        text-align: center;
+        box-sizing: border-box;
+        vertical-align: middle;
+        width: 56px;
+        position: relative;
+        font-size: 14px;
+        line-height: 32px;
+        .opaination-wrapInput {
+            display: inline-flex;
+            flex-grow: 0.273;
+            align-items: center;
+            justify-content: center;
+            padding: 1px 11px;
+            background-color: #e5e5e5;
+            background-image: none;
+            transition: box-shadow 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform: translate3d(0, 0, 0);
+            border-radius: 0px;
+            box-shadow: none;
+            height: 36px;
+            .opagination-innerInput {
+                width: 100%;
+                flex-flow: 1;
+                -webkit-appearance: none;
+                color: #000000;
+                font-size: inherit;
+                height: calc( 32px - 2px);
+                line-height: calc( 32px - 2px);
+                padding: 0;
+                outline: none;
+                border: none;
+                background: none;
+                box-sizing: border-box;
+            }
+        }
+    }
+}
+</style>

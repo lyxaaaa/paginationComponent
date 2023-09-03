@@ -1,0 +1,258 @@
+<template>
+    <ul @click="onPagerClick" @keyup.enter="onEnter" class="o-pagination-pager">
+        <li
+            v-if="pageCount > 0"
+            class="number"
+            :aria-current="currentPage === 1"
+            :aria-label="t('pagination.currentPage', { pager: 1 })"
+            :tabindex="tabindex"
+        >
+            1
+        </li>
+        <li
+            v-if="showPrevMore"
+            :class="prevMoreKls"
+            :tabindex="tabindex"
+            :aria-label="t('pagination.prevPages', { pager: pagerCount - 2 })"
+            @mouseenter="onMouseEnter(true)"
+            @mouseleave="quickPrevHover = false"
+            @focus="onFocus(true)"
+            @blur="quickPrevFocus = false"
+        >
+            <ArrowDoubleLeft v-if="(quickPrevHover || quickPrevFocus) && !disabled" />
+            <Morefilled v-else />
+        </li>
+        <li
+            v-for="pager in pagers"
+            :key="pager"
+            class="number"
+            :aria-current="currentPage === pager"
+            :aria-label="t('pagination.currentPage', { pager })"
+            :tabindex="tabindex"
+        >
+            {{ pager }}
+        </li>
+        <li
+            v-if="showNextMore"
+            :class="nextMoreKls"
+            :tabindex="tabindex"
+            :aria-label="t('pagination.nextPages', { pager: pagerCount - 2 })"
+            @mouseenter="onMouseEnter()"
+            @mouseleave="quickNextHover = false"
+            @focus="onFocus()"
+            @blur="quickNextFocus = false"
+        >
+            <ArrowDoubleRight v-if="(quickNextHover || quickNextFocus) && !disabled" />
+            <Morefilled v-else />
+        </li>
+        <li
+            v-if="pageCount > 1"
+            class="number"
+            :aria-current="currentPage === pageCount"
+            :aria-label="t('pagination.currentPage', { pager: pageCount })"
+            :tabindex="tabindex"
+        >
+            {{ pageCount }}
+        </li>
+    </ul>
+</template>
+
+<script lang="ts" setup>
+import { computed, ref, watchEffect } from 'vue'
+import { useLocale } from '../hooks/useLocale'
+import { paginationPagerProps } from './pager'
+import Morefilled from '../assets/morefilled.vue'
+import ArrowDoubleLeft from '../assets/arrowDoubleLeft.vue'
+import ArrowDoubleRight from '../assets/arrowDoubleRight.vue'
+
+defineOptions
+({
+    name: 'OPaginationPager',
+})
+
+const props = defineProps(paginationPagerProps)
+const emit = defineEmits(['change'])
+const { t } = useLocale()
+
+const showPrevMore = ref(false)
+const showNextMore = ref(false)
+const quickPrevHover = ref(false)
+const quickNextHover = ref(false)
+const quickPrevFocus = ref(false)
+const quickNextFocus = ref(false)
+
+const pagers = computed(() => {
+    const pagerCount = props.pagerCount
+    const halfPagerCount = (pagerCount - 1) / 2
+    const currentPage = Number(props.currentPage)
+    const pageCount = Number(props.pageCount)
+    let showPrevMore = false
+    let showNextMore = false
+    if (pageCount > pagerCount) {
+        if (currentPage > pagerCount - halfPagerCount) {
+            showPrevMore = true
+        }
+        if (currentPage < pageCount - halfPagerCount) {
+            showNextMore = true
+        }
+    }
+
+    const array: number[] = []
+    if (showPrevMore && !showNextMore) {
+        const startPage = pageCount - (pagerCount - 2)
+        for (let i = startPage; i < pageCount; i++) {
+            array.push(i)
+        }
+    } 
+    else if (!showPrevMore && showNextMore) {
+        for (let i = 2; i < pagerCount; i++) {
+            array.push(i)
+        }
+    } 
+    else if (showPrevMore && showNextMore) {
+        const offset = Math.floor(pagerCount / 2) - 1
+        for (let i = currentPage - offset; i <= currentPage + offset; i++) {
+            array.push(i)
+        }
+    } 
+    else {
+        for (let i = 2; i < pageCount; i++) {
+            array.push(i)
+        }
+    }
+    return array
+})
+
+const prevMoreKls = computed(() => [
+    'more',
+    'btn-quickprev',
+    // nsIcon.b(),
+    // nsPager.is('disabled', props.disabled),
+])
+
+const nextMoreKls = computed(() => [
+    'more',
+    'btn-quicknext',
+    // nsIcon.b(),
+    // nsPager.is('disabled', props.disabled),
+])
+
+const tabindex = computed(() => (props.disabled ? -1 : 0))
+
+watchEffect(() => {
+    const halfPagerCount = (props.pagerCount - 1) / 2
+    showPrevMore.value = false
+    showNextMore.value = false
+    if (props.pageCount! > props.pagerCount) {
+        if (props.currentPage > props.pagerCount - halfPagerCount) {
+            showPrevMore.value = true
+        }
+        if (props.currentPage < props.pageCount! - halfPagerCount) {
+            showNextMore.value = true
+        }
+    }
+})
+
+function onMouseEnter(forward = false) {
+    //区分是 prev还是next按钮，并设置相应hover值
+    if (props.disabled) return
+    if (forward) {
+        quickPrevHover.value = true
+    } else {
+        quickNextHover.value = true
+    }
+}
+
+function onFocus(forward = false) {
+    //区分是 prev还是next按钮，并设置相应focus值
+    if (forward) {
+        quickPrevFocus.value = true
+    } else {
+        quickNextFocus.value = true
+    }
+}
+
+function onEnter(e: UIEvent) {
+    const target = e.target as HTMLElement
+    if (
+        target.tagName.toLowerCase() === 'li' &&
+        Array.from(target.classList).includes('number')
+    ) {
+            const newPage = Number(target.textContent)
+            if (newPage !== props.currentPage) {
+            emit('change', newPage)
+        }
+    } else if (
+        target.tagName.toLowerCase() === 'li' &&
+        Array.from(target.classList).includes('more')
+    ) {
+            onPagerClick(e)
+    }
+}
+
+function onPagerClick(event: UIEvent) {
+    const target = event.target as HTMLElement
+    //因部分li元素嵌套子元素，使得target不能始终指向li元素，故特使用closest('li')
+    const liElement = target.closest('li') as HTMLElement
+    console.log('onPagerClick',target,liElement)
+    if (liElement.tagName.toLowerCase() === 'ul' || props.disabled) {
+        return
+    }
+    let newPage = Number(liElement.textContent)
+    const pageCount = props.pageCount!
+    const currentPage = props.currentPage
+    const pagerCountOffset = props.pagerCount - 2
+    if (liElement.className.includes('more')) {
+        if (liElement.className.includes('quickprev')) {
+            newPage = currentPage - pagerCountOffset
+        } else if (liElement.className.includes('quicknext')) {
+            newPage = currentPage + pagerCountOffset
+        }
+    }
+    //边界测试
+    if (!Number.isNaN(+newPage)) {
+        if (newPage < 1) {
+            newPage = 1
+        }
+        if (newPage > pageCount) {
+            newPage = pageCount
+        }
+    }
+    if (newPage !== currentPage) {
+        emit('change', newPage)
+    }
+}
+</script>
+
+<style lang="scss" scoped>
+.o-pagination-pager {
+    user-select: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 36px;
+        height: 36px;
+        width: 36px;
+        font-size: 14px;
+        padding: 0 4px;
+        margin: 0 4px;
+        color: #000000;
+        background: #e5e5e5;
+        border: none;
+        border-radius: 0px;
+        text-align: center;
+        cursor: pointer;
+        box-sizing: border-box;
+        .opagination-icon {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+</style>
