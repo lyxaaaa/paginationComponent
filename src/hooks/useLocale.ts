@@ -1,12 +1,9 @@
 import { ref, computed } from 'vue';
 
-// 声明全局语言环境的类型
 type Language = 'en' | 'zh'; // 假设只支持英语和中文
 
-// 假设一个全局的语言环境
 const globalLanguage = ref<Language>('zh'); // 初始默认语言为中文
 
-// 假设这里有一个翻译函数
 function translate(language: Language, key: string): string {
     const translations: Record<Language, Record<string, string>> = {
         en: {
@@ -20,7 +17,7 @@ function translate(language: Language, key: string): string {
             'pagination.prevPages' : 'prevPages',
             'pagination.nextPages' : 'nextPages',
             'pagination.choose' : 'please choose',
-            // 更多英语翻译项...
+            // 更多...
         },
         zh: {
             'app.title': '我的应用',
@@ -33,14 +30,14 @@ function translate(language: Language, key: string): string {
             'pagination.prevPages' : '前页',
             'pagination.nextPages' : '后页',
             'pagination.choose' : '请选择',
-            // 更多中文翻译项...
+            // 更多...
         },
         // 更多语言...
     }
   return translations[language][key] || key; // 如果找不到对应翻译，返回原始键
 }
 
-// 自定义 useLocale hook
+
 export function useLocale() {
   // 当前语言
     const currentLanguage = computed<Language>(() => globalLanguage.value);

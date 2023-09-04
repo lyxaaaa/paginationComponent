@@ -48,23 +48,23 @@ type LayoutKey =
 
 export const paginationProps = {
     /**
-     * @description options of item count per page
+     * @description 每页容量
      */
     pageSize: Number,
     /**
-     * @description default initial value of page size, not setting is the same as setting 10
+     * @description 默认的每页容量，一般为10
      */
     defaultPageSize: Number,
     /**
-     * @description total item count
+     * @description 数据总量
      */
     total: Number,
     /**
-     * @description 总页数 Set either `total` or `page-count` and pages will be displayed; if you need `page-sizes`, `total` is required
+     * @description 总页数 （`total`和`page-count`二者选其一即可。若需要`page-sizes`，则必须传递`total`）
      */
     pageCount: Number,
     /**
-     * @description number of pagers. Pagination collapses when the total page count exceeds this value
+     * @description 展示列表的页码数
      */
     pagerCount: {
         type: Number,
@@ -81,15 +81,15 @@ export const paginationProps = {
         default: 7,
     },
     /**
-     * @description 当前页
+     * @description 当前页码
      */
     currentPage: Number,
     /**
-     * @description default initial value of current-page, not setting is the same as setting 1
+     * @description 默认的当前页码，一般为1
      */
     defaultCurrentPage: Number,
     /**
-     * @description layout of Pagination, elements separated with a comma
+     * @description 分页器的拆分组件
      */
     layout: {
         type: String,
@@ -98,44 +98,35 @@ export const paginationProps = {
         ).join(', '),
     },
     /**
-     * @description 数组 item count of each page
+     * @description 每页容量的可选值（数组）
      */
     pageSizes: {
-        // type: definePropType<number[]>(Array),
-        // default: () => mutable([10, 20, 30, 40, 50, 100] as const),
         type: Array as () => number[],
         default: () => [10, 20, 30, 40, 50, 100] as const,
     },
     /**
-     * @description 选择pageSize的下拉框样式
-     */
-    popperClass: {
-        type: String,
-        default: '',
-    },
-    /**
-     * @description text for the prev button
+     * @description prev按钮的文字值
      */
     prevText: {
         type: String,
         default: '',
     },
     /**
-     * @description icon for the prev button, higher priority of `prev-text`
+     * @description prev按钮的图标，优先级高于`prevText`
      */
     prevIcon: {
         type: iconPropType,
         default: () => ArrowLeft,
     },
     /**
-     * @description text for the next button
+     * @description next按钮的文字值
      */
     nextText: {
         type: String,
         default: '',
     },
     /**
-     * @description icon for the next button, higher priority of `next-text`
+     * @description next按钮的图标，优先级高于`nextText`
      */
     nextIcon: {
         type: iconPropType,
@@ -157,7 +148,8 @@ export const paginationProps = {
      * @description 当只有一页时，是否隐藏
      */
     hideOnSinglePage: Boolean,
-    } as const
+} as const
+
 export type PaginationProps = ExtractPropTypes<typeof paginationProps>
 
 export const paginationEmits = {
@@ -292,14 +284,12 @@ export default defineComponent({
             if (props.disabled) return
             currentPageBridge.value -= 1
             emit('prev-click', currentPageBridge.value)
-            console.log('prev-click')
         }
 
         function next() {
             if (props.disabled) return
             currentPageBridge.value += 1
             emit('next-click', currentPageBridge.value)
-            console.log('next-click')
         }
 
         function addClass(element: any, cls: string) {
@@ -371,7 +361,6 @@ export default defineComponent({
             sizes: h(Sizes, {
                 pageSize: pageSizeBridge.value,
                 pageSizes: props.pageSizes,
-                popperClass: props.popperClass,
                 disabled: props.disabled,
                 size: props.small ? 'small' : 'default',
                 // onChange: handleSizeChange,
@@ -389,13 +378,13 @@ export default defineComponent({
             //将各个布局关键字对应的渲染组件分别添加到根元素的子元素数组或右侧包装容器的子元素数组中，以实现动态的分页器布局
             components.forEach((c) => {
                 if (c === '->') {
-                haveRightWrapper = true
-                return
+                    haveRightWrapper = true
+                    return
                 }
                 if (!haveRightWrapper) {
-                rootChildren.push(TEMPLATE_MAP[c])
+                    rootChildren.push(TEMPLATE_MAP[c])
                 } else {
-                rightWrapperChildren.push(TEMPLATE_MAP[c])
+                    rightWrapperChildren.push(TEMPLATE_MAP[c])
                 }
             })
 

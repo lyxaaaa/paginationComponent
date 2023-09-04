@@ -6,6 +6,7 @@
             <input
                 :size="size"
                 class="opagination-innerInput"
+                :value="currentPage"
                 :min="1"
                 :max="pageCount"
                 :disabled="disabled"
@@ -27,7 +28,6 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
 import { useLocale } from '../hooks/useLocale'
-import { useNamespace } from '../hooks/useNamespace'
 import { usePagination } from '../usePagination'
 import { paginationJumperProps } from './jumper'
 
@@ -37,7 +37,6 @@ defineOptions({
 
 defineProps(paginationJumperProps)
 const { t } = useLocale()
-const ns = useNamespace('pagination')
 const { pageCount, disabled, currentPage, changeEvent } = usePagination()
 const userInput = ref<number | string>()
 let innerValue = computed(() => userInput.value ?? currentPage?.value)
@@ -52,19 +51,17 @@ function handleInput(val: number | string) {
 function handleChange(event: Event) {
     let inputValue = (event.target as HTMLInputElement).value
     const nowPageCount: number = pageCount?.value || 0
-    console.log('handleChange',inputValue,pageCount?.value)
     let val = Math.trunc(+inputValue)
-    console.log(val,nowPageCount)
     //边界情况判断
     if(val > nowPageCount && nowPageCount!==0 ) {
         val = nowPageCount
-        inputValue = val.toString()
-        console.log('inputValue',inputValue)
-        innerValue = inputValue
+        // inputValue = val.toString()
+        // console.log('inputValue',inputValue)
+        // innerValue = inputValue
     }
     if(val < 1 ){
         val = 1
-        inputValue = val.toString()
+        // inputValue = val.toString()
     }
     changeEvent?.(val)
     userInput.value = undefined
@@ -96,10 +93,12 @@ function handleChange(event: Event) {
         font-size: 14px;
         line-height: 32px;
         .opaination-wrapInput {
+            width: 70%;
             display: inline-flex;
             flex-grow: 0.273;
             align-items: center;
             justify-content: center;
+            box-sizing: border-box;
             padding: 1px 11px;
             background-color: #e5e5e5;
             background-image: none;
@@ -109,10 +108,11 @@ function handleChange(event: Event) {
             box-shadow: none;
             height: 36px;
             .opagination-innerInput {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
                 width: 100%;
-                flex-flow: 1;
-                appearance: none;
-                -webkit-appearance: none;
                 color: #000000;
                 font-size: inherit;
                 height: 30px;
@@ -122,6 +122,14 @@ function handleChange(event: Event) {
                 border: none;
                 background: none;
                 box-sizing: border-box;
+            }
+            input[type=number] {
+                -moz-appearance:textfield;
+            }
+            input[type=number]::-webkit-inner-spin-button,
+            input[type=number]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
             }
         }
     }

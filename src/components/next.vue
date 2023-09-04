@@ -9,7 +9,7 @@
     >
         <span v-if="nextText">{{ nextText }}</span>
         <i class="o-arrowicon" v-else>
-            <img src="/src/assets/ArrowRight.svg" />
+            <img src="/src/assets/ArrowRight.svg" alt=""/>
         </i>
     </button>
 </template>
@@ -63,5 +63,10 @@ const internalDisabled = computed(
     box-sizing: border-box;
     cursor: pointer;
     margin-left: 4px;
+}
+.btn-next:disabled {
+    cursor: not-allowed;
+    background-color: #e5e5e5;
+    color: #a8abb2;
 }
 </style>

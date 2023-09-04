@@ -4,7 +4,7 @@
         :total="totalItems"
         :page-sizes="opageSizes"
         :current-page="ocurrentPage"
-        layout="sizes,prev,pager,next,jumper"
+        layout="total,sizes,prev,pager,next,jumper"
         :page-size="opageSize"
         @current-change="handleCurrentChange"
         @size-change="handleSizeChange"
@@ -45,8 +45,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .container {
-    width: 100vw;
-    height: 60vh;
+    width: 98vw;
+    height: 96vh;
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -60,4 +60,9 @@ const internalDisabled = computed(
     cursor: pointer;
     margin-right: 4px;
 }
+.btn-prev:disabled {
+    cursor: not-allowed;
+    background-color: #e5e5e5;
+    color: #a8abb2;
+}
 </style>

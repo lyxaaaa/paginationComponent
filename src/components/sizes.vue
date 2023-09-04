@@ -1,24 +1,9 @@
 <template>
     <span class="opagination-sizes">
-        <!-- <select
-            :model-value="innerPageSize"
-            class="opagination-select"
-            :disabled="disabled"
-            :size="size"
-            :validate-event="false" 
-            @change="handleChange"
-        >
-        <option
-            v-for="item in innerPageSizes"
-            :key="item"
-            :value="item"
-            class="opaination-option"
-            :label="item + t('pagination.pagesize')"
-        />
-        </select> -->
         <div class="o-sizes-wrapper" @click="toggleDropdown">
             <input 
                 type="text"
+                :validate-event="false"
                 :placeholder="t('pagination.choose')"
                 :value="`${innerPageSize} ${t('pagination.pagesize')}`"
                 :disabled="disabled"
@@ -26,9 +11,8 @@
                 class="o-sizes-input"
             >
             <span class="o-sizes-downIcon">
-                <i class="o-sizes-iconSize">
-                    <img src="/src/assets/ArrowDown.svg" alt="" v-if="!isDropdownOpen" />
-                    <img src="/src/assets/ArrowUp.svg" alt="" v-else />
+                <i :class="['o-sizes-iconSize', {'is-reverse': isDropdownOpen}]">
+                    <img src="/src/assets/ArrowDown.svg" alt="" class="arrowTransition"/>
                 </i>
             </span>
         </div>
@@ -47,7 +31,6 @@
 
 <script lang="ts" setup>
 import { useLocale } from '../hooks/useLocale'
-import { useNamespace } from '../hooks/useNamespace'
 import { computed, ref, watch } from 'vue'
 import { usePagination } from '../usePagination'
 import { paginationSizesProps } from './sizes'
@@ -59,7 +42,6 @@ defineOptions({
 const props = defineProps(paginationSizesProps)
 const emit = defineEmits(['page-size-change'])
 const { t } = useLocale()
-const ns = useNamespace('pagination')
 const pagination = usePagination()
 const innerPageSize = ref<number>(props.pageSize!)
 
@@ -155,6 +137,11 @@ function handleChange(event: Event) {
             box-sizing: inherit;
             .o-sizes-iconSize {
                 width: 14px;
+                transition: all 0.3s ease;
+            }
+            .is-reverse {
+                transform: rotateZ(-180deg);
+                
             }
         }
     }
@@ -179,7 +166,6 @@ function handleChange(event: Event) {
             padding: 0 32px 0 20px;
             box-sizing: border-box;
             font-size: 14px;
-            //background-color: #ffffff;
             color: #000000;
             &:hover {
                 background-color: #f5f6f8;
