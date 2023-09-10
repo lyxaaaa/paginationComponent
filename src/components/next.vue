@@ -52,7 +52,7 @@ const internalDisabled = computed(
     height: 36px;
     outline: none;
     border: none;
-    margin-left: 16px;
+    margin-right: 16px;
     background-color: #e5e5e5;
     color: #000000;
     border-radius: 0px;

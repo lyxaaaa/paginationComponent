@@ -11,7 +11,6 @@ import {
 } from 'vue'
 import ArrowLeft from './assets/icon/ArrowLeft.vue'
 import ArrowRight from './assets/icon/ArrowRight.vue'
-import { useLocale } from './hooks/useLocale'
 import { useNamespace } from './hooks/useNamespace'
 import { OPaginationKey } from './constants'
 import './test.scss'
@@ -41,7 +40,6 @@ type LayoutKey =
     | 'pager'
     | 'next'
     | 'jumper'
-    | '->'
     | 'total'
     | 'sizes'
     | 'slot'
@@ -94,7 +92,7 @@ export const paginationProps = {
     layout: {
         type: String,
         default: (
-        ['prev', 'pager', 'next', 'jumper', '->', 'total'] as LayoutKey[]
+        [ 'total', 'prev', 'pager', 'next', 'jumper'] as LayoutKey[]
         ).join(', '),
     },
     /**
@@ -137,10 +135,6 @@ export const paginationProps = {
      */
     small: Boolean,
     /**
-     * @description 是否buttons有背景颜色
-     */
-    background: Boolean,
-    /**
      * @description 是否分页器被禁用
      */
     disabled: Boolean,
@@ -163,15 +157,13 @@ export const paginationEmits = {
 export type PaginationEmits = typeof paginationEmits
 
 
-export default defineComponent({
-    name: 'OPagination',
+export const OPaginationPC =  defineComponent({
+    name: 'OPaginationPC',
     props: paginationProps,
     emits: paginationEmits,
     setup(props, { emit,slots }) {
-        const { t } = useLocale()
         const ns = useNamespace('pagination')
         const vnodeProps = getCurrentInstance()!.vnode.props || {}
-        // we can find @xxx="xxx" props on `vnodeProps` to check if user bind corresponding events
         const hasCurrentPageListener =
             'onUpdate:currentPage' in vnodeProps ||
             'onUpdate:current-page' in vnodeProps ||
@@ -208,7 +200,6 @@ export default defineComponent({
             return true
         })
 
-        //传递给 ref 的值会被包装成一个响应式对象，当这个值发生变化时，组件会自动更新。
         const innerPageSize = ref(
             isAbsent(props.defaultPageSize) ? 10 : props.defaultPageSize
         )
@@ -292,15 +283,6 @@ export default defineComponent({
             emit('next-click', currentPageBridge.value)
         }
 
-        function addClass(element: any, cls: string) {
-            if (element) {
-                if (!element.props) {
-                    element.props = {}
-                }
-                element.props.class = [element.props.class, cls].join(' ')
-            }
-        }
-
         provide(OPaginationKey, {
             pageCount: pageCountBridge,
             disabled: computed(() => props.disabled),
@@ -314,19 +296,11 @@ export default defineComponent({
             if (!assertValidUsage.value) {
                 return null
             }
-            //传入的布局字符串，描述了分页器应该显示哪些控件
             if (!props.layout) return null
             //判断在只有一页时是否隐藏分页器
             if (props.hideOnSinglePage && pageCountBridge.value <= 1) return null
 
             const rootChildren: Array<VNode | VNode[] | null> = []
-            const rightWrapperChildren: Array<VNode | VNode[] | null> = []
-
-            const rightWrapperRoot = h(
-                'div',// 创建一个 <div> 元素
-                { class: ns.e('rightwrapper') },// 类名
-                rightWrapperChildren  // 设置右侧包装容器的子元素
-            )
 
             //一个映射对象，将布局关键字映射到对应的渲染组件
             const TEMPLATE_MAP: Record<
@@ -373,40 +347,17 @@ export default defineComponent({
             .split(',')
             .map((item: string) => item.trim()) as LayoutKey[]
 
-            let haveRightWrapper = false
-
-            //将各个布局关键字对应的渲染组件分别添加到根元素的子元素数组或右侧包装容器的子元素数组中，以实现动态的分页器布局
             components.forEach((c) => {
-                if (c === '->') {
-                    haveRightWrapper = true
-                    return
+                if ( TEMPLATE_MAP[c] ) {
+                    rootChildren.push(TEMPLATE_MAP[c] as VNode | VNode[] | null);
                 }
-                if (!haveRightWrapper) {
-                    rootChildren.push(TEMPLATE_MAP[c])
-                } else {
-                    rightWrapperChildren.push(TEMPLATE_MAP[c])
-                }
-            })
-
-            addClass(rootChildren[0], ns.is('first'))
-            addClass(rootChildren[rootChildren.length - 1], ns.is('last'))
-
-            if (haveRightWrapper && rightWrapperChildren.length > 0) {
-                addClass(rightWrapperChildren[0], ns.is('first'))
-                addClass(
-                    rightWrapperChildren[rightWrapperChildren.length - 1],
-                    ns.is('last')
-                )
-                rootChildren.push(rightWrapperRoot)
-            }
+            });
 
             return h(
                 'div',
                 {
                     class: [
                         'test',
-                        ns.b(),
-                        ns.is('background', props.background),
                         {
                         [ns.m('small')]: props.small,
                         },

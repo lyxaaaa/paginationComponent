@@ -5,6 +5,7 @@
         <div class="opaination-wrapInput">
             <input
                 :size="size"
+                ref="userInput"
                 class="opagination-innerInput"
                 :value="currentPage"
                 :min="1"
@@ -55,16 +56,12 @@ function handleChange(event: Event) {
     //边界情况判断
     if(val > nowPageCount && nowPageCount!==0 ) {
         val = nowPageCount
-        // inputValue = val.toString()
-        // console.log('inputValue',inputValue)
-        // innerValue = inputValue
     }
     if(val < 1 ){
         val = 1
-        // inputValue = val.toString()
     }
     changeEvent?.(val)
-    userInput.value = undefined
+    userInput.value?.blur()
 }
 </script>
 

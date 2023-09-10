@@ -141,7 +141,6 @@ function handleChange(event: Event) {
             }
             .is-reverse {
                 transform: rotateZ(-180deg);
-                
             }
         }
     }

@@ -26,8 +26,9 @@ defineProps(paginationTotalProps)
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #000000;
+    color: #999999;
     font-size: 14px;
+    font-weight: 300;
     white-space: nowrap;
     margin: 0 6px;
     box-sizing: border-box;
