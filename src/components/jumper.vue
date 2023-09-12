@@ -4,7 +4,6 @@
     <div class="opagination-jump-input">
         <div class="opaination-wrapInput">
             <input
-                :size="size"
                 ref="userInput"
                 class="opagination-innerInput"
                 :value="currentPage"
@@ -51,17 +50,12 @@ function handleInput(val: number | string) {
 //用户按下Enter键 或者 焦点从输入框移开 触发
 function handleChange(event: Event) {
     let inputValue = (event.target as HTMLInputElement).value
-    const nowPageCount: number = pageCount?.value || 0
-    let val = Math.trunc(+inputValue)
-    //边界情况判断
-    if(val > nowPageCount && nowPageCount!==0 ) {
-        val = nowPageCount
-    }
-    if(val < 1 ){
-        val = 1
-    }
+    const val = Math.trunc(+inputValue)
+    console.log('changeEvent',changeEvent)
     changeEvent?.(val)
-    userInput.value?.blur()
+    // 在函数末尾调用输入框的 blur() 方法以使其失去焦点
+    const inputElement = event.target as HTMLInputElement;
+    inputElement.blur();
 }
 </script>
 
@@ -78,6 +72,7 @@ function handleChange(event: Event) {
     color: #999999;
     .opagination-goto {
         margin-right: 8px;
+        white-space: nowrap;
     }
     .opagination-jump-input {
         display: inline-flex;

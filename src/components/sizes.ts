@@ -12,9 +12,6 @@ export const paginationSizesProps = {
         type: Array as () => number[],
         default: () => [10, 20, 30, 40, 50, 100] as const,
     },
-    popperClass: {
-        type: String,
-    },
     disabled: Boolean,
     size: {
         type: String,

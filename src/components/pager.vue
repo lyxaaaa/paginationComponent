@@ -126,15 +126,11 @@ const pagers = computed(() => {
 const prevMoreKls = computed(() => [
     'more',
     'btn-quickprev',
-    // nsIcon.b(),
-    // nsPager.is('disabled', props.disabled),
 ])
 
 const nextMoreKls = computed(() => [
     'more',
     'btn-quicknext',
-    // nsIcon.b(),
-    // nsPager.is('disabled', props.disabled),
 ])
 
 const tabindex = computed(() => (props.disabled ? -1 : 0))

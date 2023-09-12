@@ -1,28 +1,40 @@
 <template>
 <div class="container">
-    <OPaginationPC
-        :total="totalItems"
-        :page-sizes="opageSizes"
-        :current-page="ocurrentPage"
-        layout="total,sizes,prev,pager,next,slot,jumper"
-        :page-size="opageSize"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-    >
+    <div class="pagination-pc">
+        <OPaginationPC
+            :total="totalItems"
+            :page-sizes="opageSizes"
+            :current-page="ocurrentPage"
+            layout="total,sizes,prev,pager,next,slot,jumper"
+            :page-size="opageSize"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
         <div class="opagination-slot">
             {{ ocurrentPage }}/{{ Math.ceil(totalItems/opageSize) }}
         </div>
-    </OPaginationPC>
+        </OPaginationPC>
+    </div>
+    <div class="pagination-mo">
+        <OPaginationMO
+            :total="totalItems"
+            :page-count="10"
+            :page-size="10"
+            :current-page="ocurrentPage"
+            @current-change="handleCurrentChange"
+        />
+    </div>
 </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { OPaginationPC } from './pagination'
+import { OPaginationPC, OPaginationMO } from './pagination'
 
 export default defineComponent({
     components: {
         OPaginationPC,
+        OPaginationMO,
     },
     data() {
         return {
@@ -56,6 +68,21 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     background-color: #f5f6f8;
+    .pagination-pc {
+        display: block; // 默认显示 PC 分页组件
+    
+        @media (max-width: 768px) {
+          display: none; // 在窄屏幕下隐藏 PC 分页组件
+        }
+    }
+    
+    .pagination-mo {
+        display: none; // 默认隐藏 MO 分页组件
+    
+        @media (max-width: 768px) {
+          display: block; // 在窄屏幕下显示 MO 分页组件
+        }
+    }
     .opagination-slot {
         font-size: 14px;
         margin: 0 8px;

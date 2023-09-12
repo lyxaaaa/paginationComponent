@@ -11,16 +11,21 @@ import {
 } from 'vue'
 import ArrowLeft from './assets/icon/ArrowLeft.vue'
 import ArrowRight from './assets/icon/ArrowRight.vue'
-import { useNamespace } from './hooks/useNamespace'
 import { OPaginationKey } from './constants'
 import './test.scss'
 
+//PC端
 import Prev from './components/prev.vue'
 import Next from './components/next.vue'
 import Sizes from './components/sizes.vue'
 import Jumper from './components/jumper.vue'
 import Total from './components/total.vue'
 import Pager from './components/pager.vue'
+
+//移动端
+import PrevMO from './components/prevMO.vue' 
+import NextMO from './components/nextMO.vue'
+import DisplayMO from './components/displayMO.vue'
 
 import type { ExtractPropTypes, VNode } from 'vue'
 
@@ -35,7 +40,7 @@ const iconPropType = definePropType<string | Component>([
 const isAbsent = (v: unknown): v is undefined => typeof v !== 'number'
 const isNumber = (val: any): val is number => typeof val === 'number'
 
-type LayoutKey =
+type LayoutKeyPC =
     | 'prev'
     | 'pager'
     | 'next'
@@ -44,7 +49,14 @@ type LayoutKey =
     | 'sizes'
     | 'slot'
 
-export const paginationProps = {
+type LayoutKeyMO =
+    | 'prevMO'
+    | 'displayMO'
+    | 'nextMO'
+
+
+//PC端
+export const paginationPropsPC = {
     /**
      * @description 每页容量
      */
@@ -92,7 +104,7 @@ export const paginationProps = {
     layout: {
         type: String,
         default: (
-        [ 'total', 'prev', 'pager', 'next', 'jumper'] as LayoutKey[]
+        [ 'total', 'prev', 'pager', 'next', 'jumper'] as LayoutKeyPC[]
         ).join(', '),
     },
     /**
@@ -143,10 +155,9 @@ export const paginationProps = {
      */
     hideOnSinglePage: Boolean,
 } as const
+export type PaginationPropsPC = ExtractPropTypes<typeof paginationPropsPC>
 
-export type PaginationProps = ExtractPropTypes<typeof paginationProps>
-
-export const paginationEmits = {
+export const paginationEmitsPC = {
     'update:current-page': (val: number) => isNumber(val),
     'update:page-size': (val: number) => isNumber(val),
     'size-change': (val: number) => isNumber(val),
@@ -154,15 +165,60 @@ export const paginationEmits = {
     'prev-click': (val: number) => isNumber(val),
     'next-click': (val: number) => isNumber(val),
 }
-export type PaginationEmits = typeof paginationEmits
+export type PaginationEmitsPC = typeof paginationEmitsPC
+
+//移动端
+export const paginationPropsMO = {
+    /**
+     * @description 是否分页器被禁用
+     */
+    disabled: Boolean,
+    /**
+     * @description 数据总量
+     */
+        total: Number,
+    /**
+     * @description 当前页码
+     */
+    currentPage: {
+        type: Number,
+        default: 1,
+    },
+    /**
+     * @description 总页数
+     */
+    pageCount: {
+        type: Number,
+        default: 1,
+    },
+    /**
+     * @description 每页容量，默认为10
+     */
+    pageSize: {
+        type: Number,
+        default: 10,
+    },
+    /**
+     * @description 当只有一页时，是否隐藏
+     */
+    hideOnSinglePage: Boolean,
+} as const
+export type PaginationPropsMO = ExtractPropTypes<typeof paginationPropsMO>
+
+export const paginationEmitsMO = {
+    'update:current-page': (val: number) => isNumber(val),
+    'current-change': (val: number) => isNumber(val),
+    'prev-click': (val: number) => isNumber(val),
+    'next-click': (val: number) => isNumber(val),
+}
+export type PaginationEmitsMO = typeof paginationEmitsMO
 
 
 export const OPaginationPC =  defineComponent({
     name: 'OPaginationPC',
-    props: paginationProps,
-    emits: paginationEmits,
+    props: paginationPropsPC,
+    emits: paginationEmitsPC,
     setup(props, { emit,slots }) {
-        const ns = useNamespace('pagination')
         const vnodeProps = getCurrentInstance()!.vnode.props || {}
         const hasCurrentPageListener =
             'onUpdate:currentPage' in vnodeProps ||
@@ -301,10 +357,9 @@ export const OPaginationPC =  defineComponent({
             if (props.hideOnSinglePage && pageCountBridge.value <= 1) return null
 
             const rootChildren: Array<VNode | VNode[] | null> = []
-
             //一个映射对象，将布局关键字映射到对应的渲染组件
             const TEMPLATE_MAP: Record<
-                Exclude<LayoutKey, '->'>,
+                Exclude<LayoutKeyPC, '->'>,
                 VNode | VNode[] | null
             > = {
             prev: h(Prev, {
@@ -345,7 +400,7 @@ export const OPaginationPC =  defineComponent({
 
             const components = props.layout
             .split(',')
-            .map((item: string) => item.trim()) as LayoutKey[]
+            .map((item: string) => item.trim()) as LayoutKeyPC[]
 
             components.forEach((c) => {
                 if ( TEMPLATE_MAP[c] ) {
@@ -358,9 +413,166 @@ export const OPaginationPC =  defineComponent({
                 {
                     class: [
                         'test',
-                        {
-                        [ns.m('small')]: props.small,
-                        },
+                    ],
+                },
+                rootChildren
+            )
+        }
+    }
+})
+
+export const OPaginationMO = defineComponent({
+    name: 'OPaginationMO',
+    props: paginationPropsMO,
+    emits: paginationEmitsMO,
+    setup(props, { emit }) {
+        const vnodeProps = getCurrentInstance()!.vnode.props || {}
+        const hasCurrentPageListener =
+            'onUpdate:currentPage' in vnodeProps ||
+            'onUpdate:current-page' in vnodeProps ||
+            'onCurrentChange' in vnodeProps
+
+        //合法性校验
+        const assertValidUsage = computed(() => {
+            //total 和 pageCount  两者都没有传递
+            if (isAbsent(props.total) && isAbsent(props.pageCount)) return false
+            //存在currentPage，但是没有对应的监视器
+            if (!isAbsent(props.currentPage) && !hasCurrentPageListener) return false
+            return true
+        })
+
+        const innerPageSize = ref(
+            isAbsent(props.pageSize) ? 10 : props.pageSize
+        )
+        const innerCurrentPage = ref(
+            isAbsent(props.currentPage) ? 1 : props.currentPage
+        )
+
+        const pageSizeBridge = computed({
+            get() {
+                return isAbsent(props.pageSize) ? innerPageSize.value : props.pageSize
+            },
+            set(v: number) {
+                if (isAbsent(props.pageSize)) {
+                    innerPageSize.value = v
+                }
+            },
+        })
+
+        const pageCountBridge = computed<number>(() => {
+            let pageCount = 0
+            if (!isAbsent(props.pageCount)) {
+                pageCount = props.pageCount
+            } else if (!isAbsent(props.total)) {
+                pageCount = Math.max(1, Math.ceil(props.total / pageSizeBridge.value))
+            }
+            return pageCount
+        })
+
+        const currentPageBridge = computed<number>({
+            get() {
+                return isAbsent(props.currentPage)
+                ? innerCurrentPage.value
+                : props.currentPage
+            },
+            set(v) {
+                let newCurrentPage = v
+                if (v < 1) {
+                    newCurrentPage = 1
+                } else if (v > pageCountBridge.value) {
+                    newCurrentPage = pageCountBridge.value
+                }
+                if (isAbsent(props.currentPage)) {
+                    innerCurrentPage.value = newCurrentPage
+                }
+                if (hasCurrentPageListener) {
+                    emit('update:current-page', newCurrentPage)
+                    emit('current-change', newCurrentPage)
+                }
+            },
+        })
+
+        watch(pageCountBridge, (val) => {
+            if (currentPageBridge.value > val) currentPageBridge.value = val
+        })
+
+        function handleCurrentChange(val: number) {
+            currentPageBridge.value = val
+        }
+
+        function handleSizeChange(val: number) {
+            pageSizeBridge.value = val
+            const newPageCount = pageCountBridge.value
+            if (currentPageBridge.value > newPageCount) {
+                currentPageBridge.value = newPageCount
+            }
+        }
+
+        function prev() {
+            if (props.disabled) return
+            currentPageBridge.value -= 1
+            emit('prev-click', currentPageBridge.value)
+        }
+
+        function next() {
+            if (props.disabled) return
+            currentPageBridge.value += 1
+            emit('next-click', currentPageBridge.value)
+        }
+
+        provide(OPaginationKey, {
+            pageCount: pageCountBridge,
+            disabled: computed(() => props.disabled),
+            currentPage: currentPageBridge,
+            changeEvent: handleCurrentChange,
+            // handleSizeChange,
+        })
+
+        return () => {
+            //用于判断组件是否有有效的使用
+            if (!assertValidUsage.value) {
+                return null
+            }
+            //判断在只有一页时是否隐藏分页器
+            if (props.hideOnSinglePage && pageCountBridge.value <= 1) return null
+
+            const rootChildren: Array<VNode | VNode[] | null> = []
+            const TEMPLATE_MAP: Record<
+                Exclude<LayoutKeyMO, '->'>,
+                VNode | VNode[] | null
+            > = {
+                prevMO: h(PrevMO, {
+                    disabled: props.disabled,
+                    currentPage: currentPageBridge.value,
+                    onClick: prev,
+                }),
+                nextMO: h(NextMO, {
+                    disabled: props.disabled,
+                    currentPage: currentPageBridge.value,
+                    pageCount: pageCountBridge.value,
+                    onClick: next,
+                }),
+                displayMO: h(DisplayMO, {
+                    disabled: props.disabled,
+                    currentPage: currentPageBridge.value,
+                    pageCount: pageCountBridge.value,
+                    pageSize: pageSizeBridge.value,
+                })
+            }
+
+            const components = ['prevMO', 'displayMO', 'nextMO'] as LayoutKeyMO[]
+
+            components.forEach((c) => {
+                if ( TEMPLATE_MAP[c] ) {
+                    rootChildren.push(TEMPLATE_MAP[c] as VNode | VNode[] | null);
+                }
+            });
+
+            return h(
+                'div',
+                {
+                    class: [
+                        'test',
                     ],
                 },
                 rootChildren

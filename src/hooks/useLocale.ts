@@ -7,6 +7,7 @@ const globalLanguage = ref<Language>('zh'); // 初始默认语言为中文
 function translate(language: Language, key: string): string {
     const translations: Record<Language, Record<string, string>> = {
         en: {
+            //PC
             'app.title': 'My App',
             'pagination.total': 'total',
             'pagination.pagesize': 'pageSize',
@@ -17,9 +18,12 @@ function translate(language: Language, key: string): string {
             'pagination.prevPages' : 'prevPages',
             'pagination.nextPages' : 'nextPages',
             'pagination.choose' : 'please choose',
-            // 更多...
+            // Mobile
+            'pagination.prevmo' : 'Prev',
+            'pagination.nextmo' : 'Next',
         },
         zh: {
+            //PC
             'app.title': '我的应用',
             'pagination.total': '总共',
             'pagination.pagesize': '条/页',
@@ -30,7 +34,9 @@ function translate(language: Language, key: string): string {
             'pagination.prevPages' : '前页',
             'pagination.nextPages' : '后页',
             'pagination.choose' : '请选择',
-            // 更多...
+            // Mobile
+            'pagination.prevmo' : '上一页',
+            'pagination.nextmo' : '下一页',
         },
         // 更多语言...
     }
