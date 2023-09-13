@@ -18,7 +18,8 @@ defineOptions({
     name: 'OPaginationTotal',
 })
 
-defineProps(paginationTotalProps)
+const props = defineProps(paginationTotalProps)
+const total = props.total
 </script>
 
 <style lang="scss" scoped>

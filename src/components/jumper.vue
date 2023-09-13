@@ -43,17 +43,14 @@ let innerValue = computed(() => userInput.value ?? currentPage?.value)
 
 //用户实时输入触发
 function handleInput(val: number | string) {
-    console.log('handleInput',val)
+    console.log('***handleInput',val)
     userInput.value = val ? +val : ''
 }
 
-//用户按下Enter键 或者 焦点从输入框移开 触发
 function handleChange(event: Event) {
     let inputValue = (event.target as HTMLInputElement).value
     const val = Math.trunc(+inputValue)
-    console.log('changeEvent',changeEvent)
     changeEvent?.(val)
-    // 在函数末尾调用输入框的 blur() 方法以使其失去焦点
     const inputElement = event.target as HTMLInputElement;
     inputElement.blur();
 }
@@ -116,7 +113,7 @@ function handleChange(event: Event) {
                 box-sizing: border-box;
             }
             input[type=number] {
-                -moz-appearance:textfield;
+                -moz-appearance: textfield;
             }
             input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {

@@ -80,13 +80,13 @@ export const paginationPropsPC = {
         type: Number,
         //用于验证 number类型，整数，在4-22之间，奇数
         validator: (value: unknown) => {
-        return (
-            isNumber(value) &&
-            Math.trunc(value) === value &&
-            value > 4 &&
-            value < 22 &&
-            value % 2 === 1
-        )
+            return (
+                isNumber(value) &&
+                Math.trunc(value) === value &&
+                value > 4 &&
+                value < 22 &&
+                value % 2 === 1
+            )
         },
         default: 7,
     },
@@ -189,7 +189,7 @@ export const paginationPropsMO = {
      */
     pageCount: {
         type: Number,
-        default: 1,
+        // default: 1,
     },
     /**
      * @description 每页容量，默认为10
@@ -249,7 +249,7 @@ export const OPaginationPC =  defineComponent({
                         return false
                     }
                     } else {
-                    // (else block just for explaination)
+                        // for more
                     }
                 }
             }
@@ -258,9 +258,6 @@ export const OPaginationPC =  defineComponent({
 
         const innerPageSize = ref(
             isAbsent(props.defaultPageSize) ? 10 : props.defaultPageSize
-        )
-        const innerCurrentPage = ref(
-            isAbsent(props.defaultCurrentPage) ? 1 : props.defaultCurrentPage
         )
 
         const pageSizeBridge = computed({
@@ -288,11 +285,15 @@ export const OPaginationPC =  defineComponent({
             return pageCount
         })
 
+        const innerCurrentPage = ref(
+            isAbsent(props.defaultCurrentPage) ? 1 : props.defaultCurrentPage
+        )
+
         const currentPageBridge = computed<number>({
             get() {
                 return isAbsent(props.currentPage)
                 ? innerCurrentPage.value
-                : props.currentPage
+                : (props.currentPage > pageCountBridge.value ? pageCountBridge.value : props.currentPage)
             },
             set(v) {
                 let newCurrentPage = v
@@ -510,7 +511,7 @@ export const OPaginationMO = defineComponent({
 
         function prev() {
             if (props.disabled) return
-            currentPageBridge.value -= 1
+            currentPageBridge.value -= 1            
             emit('prev-click', currentPageBridge.value)
         }
 

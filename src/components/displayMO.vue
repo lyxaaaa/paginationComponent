@@ -11,7 +11,7 @@
             :model-value="innerValue"
             :validate-event="false"
             :label="t('pagination.page')"
-            @keyup.enter="handleJump"
+            @keydown.enter="handleJump"
             @blur="handleJump"
         >
         <span class="dismo-division">/</span>
@@ -37,11 +37,11 @@ let innerValue = computed(() => userInput.value ?? currentPage?.value)
 
 //用户按下Enter键 或者 焦点从输入框移开 触发
 function handleJump(event: Event) {
+    event.preventDefault(); // 阻止默认事件
+    event.stopPropagation(); // 阻止事件冒泡
     const inputValue = (event.target as HTMLInputElement).value
     let val = Math.trunc(+inputValue)
-    console.log('changeEvent',changeEvent)
     changeEvent?.(val)
-    // 在函数末尾调用输入框的 blur() 方法以使其失去焦点
     const inputElement = event.target as HTMLInputElement;
     inputElement.blur();
 }
@@ -58,7 +58,7 @@ function handleJump(event: Event) {
     font-size: 12px;
     cursor: default;
     .dismo-input {
-        width: 16px;
+        width: 20px;
         height: 14px;
         outline: none;
         border: none;
@@ -66,6 +66,7 @@ function handleJump(event: Event) {
         justify-content: center;
         align-items: center;
         text-align: center;
+        box-sizing: border-box;
         background-color: transparent;
         color: #7d32ea;
         font-size: 100%;
@@ -85,6 +86,7 @@ function handleJump(event: Event) {
         margin: 0 4px;
     }
     .dismo-pageCount {
+        white-space: nowrap;
         font-size: 100%;
     }
 }

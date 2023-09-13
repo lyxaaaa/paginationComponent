@@ -52,6 +52,7 @@ const internalDisabled = computed(
         color: #000000;
         background-color: transparent;
         line-height: 100%;
+        white-space: nowrap;
         cursor: pointer;
     }
     .nextmo-btn:disabled {

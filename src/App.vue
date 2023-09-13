@@ -1,30 +1,29 @@
 <template>
-<div class="container">
-    <div class="pagination-pc">
-        <OPaginationPC
-            :total="totalItems"
-            :page-sizes="opageSizes"
-            :current-page="ocurrentPage"
-            layout="total,sizes,prev,pager,next,slot,jumper"
-            :page-size="opageSize"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
-        >
-        <div class="opagination-slot">
-            {{ ocurrentPage }}/{{ Math.ceil(totalItems/opageSize) }}
+    <div class="container">
+        <div class="pagination-pc">
+            <OPaginationPC
+                :total="totalItems"
+                :page-sizes="opageSizes"
+                :current-page="ocurrentPage"
+                layout="total,sizes,prev,pager,next,slot,jumper"
+                :page-size="opageSize"
+                @current-change="handleCurrentChange"
+                @size-change="handleSizeChange"
+            >
+            <div class="opagination-slot">
+                {{ ocurrentPage }}/{{ Math.ceil(totalItems/opageSize) }}
+            </div>
+            </OPaginationPC>
         </div>
-        </OPaginationPC>
+        <div class="pagination-mo">
+            <OPaginationMO
+                :total="totalItems"
+                :page-size="10"
+                :current-page="ocurrentPage"
+                @current-change="handleCurrentChange"
+            />
+        </div>
     </div>
-    <div class="pagination-mo">
-        <OPaginationMO
-            :total="totalItems"
-            :page-count="10"
-            :page-size="10"
-            :current-page="ocurrentPage"
-            @current-change="handleCurrentChange"
-        />
-    </div>
-</div>
 </template>
 
 <script>
@@ -38,10 +37,10 @@ export default defineComponent({
     },
     data() {
         return {
-            totalItems: 500, // 总项目数
-            opageSize: 10,    // 每页显示的项目数
+            totalItems: 500, // 总条目数
+            opageSize: 10,    // 每页显示的条目数
             ocurrentPage: 1,  // 当前页
-            opageSizes: [10, 20, 30, 50], // 每页显示项目数选项
+            opageSizes: [10, 20, 30, 50], // 每页显示条目数选项
         }
     },
     methods: {
@@ -69,18 +68,16 @@ export default defineComponent({
     justify-content: center;
     background-color: #f5f6f8;
     .pagination-pc {
-        display: block; // 默认显示 PC 分页组件
-    
+        display: block; // 默认显示 PC 分页组件        
         @media (max-width: 768px) {
-          display: none; // 在窄屏幕下隐藏 PC 分页组件
+            display: none; // 在窄屏幕下隐藏 PC 分页组件
         }
     }
     
     .pagination-mo {
-        display: none; // 默认隐藏 MO 分页组件
-    
+        display: none; // 默认隐藏 MO 分页组件        
         @media (max-width: 768px) {
-          display: block; // 在窄屏幕下显示 MO 分页组件
+            display: block; // 在窄屏幕下显示 MO 分页组件
         }
     }
     .opagination-slot {

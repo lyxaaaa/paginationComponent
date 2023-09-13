@@ -17,7 +17,6 @@ export const paginationDisplayMOProps = {
     //总页数
     pageCount: {
         type: Number,
-        default: 50,
     },
 } as const
 

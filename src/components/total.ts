@@ -4,7 +4,7 @@ import type Total from './total.vue'
 export const paginationTotalProps = {
     total: {
         type: Number,
-        default: 1000,
+        required: true,
     },
 } as const
 
