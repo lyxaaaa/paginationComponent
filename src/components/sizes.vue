@@ -1,6 +1,6 @@
 <template>
     <span class="opagination-sizes">
-        <div class="o-sizes-wrapper" @click="toggleDropdown">
+        <div class="o-sizes-wrapper" @click="toggleDropdown" ref="selectBox">
             <input 
                 type="text"
                 :validate-event="false"
@@ -16,22 +16,24 @@
                 </i>
             </span>
         </div>
-        <ul v-show="isDropdownOpen" class="o-sizes-options">
-            <li
-                v-for="item in innerPageSizes"
-                :key="item"
-                :class="['o-sizes-option', { 'selectedOption': item === innerPageSize }]"
-                @click="handleSelectSize(item)"
-            >
-                {{ `${item} ${t('pagination.pagesize')}` }}
-            </li>
-        </ul>
+        <transition name="drop-down">
+            <ul v-show="isDropdownOpen" class="o-sizes-options">
+                <li
+                    v-for="item in innerPageSizes"
+                    :key="item"
+                    :class="['o-sizes-option', { 'selectedOption': item === innerPageSize }]"
+                    @click="handleSelectSize(item)"
+                >
+                    {{ `${item} ${t('pagination.pagesize')}` }}
+                </li>
+            </ul>
+        </transition>
     </span>
 </template>
 
 <script lang="ts" setup>
 import { useLocale } from '../hooks/useLocale'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { usePagination } from '../usePagination'
 import { paginationSizesProps } from './sizes'
 
@@ -41,6 +43,7 @@ defineOptions({
 
 const props = defineProps(paginationSizesProps)
 const emit = defineEmits(['page-size-change'])
+const disabled = props.disabled
 const { t } = useLocale()
 const pagination = usePagination()
 const innerPageSize = ref<number>(props.pageSize!)
@@ -65,6 +68,15 @@ watch(
     }
 )
 
+const selectBox = ref<HTMLElement | null>(null);
+onMounted(() => {
+    document.addEventListener("click", (e) => {
+    if (selectBox.value && !selectBox.value.contains(e.target as Node)) {
+        isDropdownOpen.value = false;
+    }
+    });
+});
+
 const innerPageSizes = computed(() => props.pageSizes)
 let isDropdownOpen = ref(false)
 
@@ -73,8 +85,7 @@ function toggleDropdown() {
 }
 
 function handleSelectSize(val: number) {
-    console.log('handleSelectSize',val)
-    // if(disabled) return
+    if(props.disabled) return
     if (!isNaN(val) && val !== innerPageSize.value) {
         innerPageSize.value = val
         pagination.handleSizeChange?.(Number(val))
@@ -84,7 +95,6 @@ function handleSelectSize(val: number) {
 
 function handleChange(event: Event) {
     let val: number = parseInt((event.target as HTMLInputElement).value, 10) // 将字符串转换为整数
-    console.log('handleChange',val)
     if (!isNaN(val) && val !== innerPageSize.value) {
         innerPageSize.value = val
         pagination.handleSizeChange?.(Number(val))
@@ -175,6 +185,26 @@ function handleChange(event: Event) {
             color: #7d6aed;
             background-color: #f5f6f8;
         }
+    }
+    
+    .drop-down-enter-active,
+    .drop-down-leave-active {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+    }
+    .drop-down-enter-from {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top; 
+    }
+    .drop-down-enter-to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top; 
+    }
+    .drop-down-leave-to {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top; 
     }
 }
 </style>
