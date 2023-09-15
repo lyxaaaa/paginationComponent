@@ -19,6 +19,7 @@ import Sizes from './components/Sizes.vue'
 import Jumper from './components/Jumper.vue'
 import Total from './components/Total.vue'
 import Pager from './components/Pager.vue'
+import Display from './components/Display.vue'
 
 //移动端
 import PrevMO from './components/PrevMO.vue' 
@@ -45,7 +46,7 @@ type LayoutKeyPC =
     | 'jumper'
     | 'total'
     | 'sizes'
-    | 'slot'
+    | 'display'
 
 type LayoutKeyMO =
     | 'prevMO'
@@ -102,7 +103,7 @@ export const paginationPropsPC = {
     layout: {
         type: String,
         default: (
-        [ 'total', 'prev', 'pager', 'next', 'jumper'] as LayoutKeyPC[]
+        [ 'total', 'prev', 'pager', 'next','display', 'jumper'] as LayoutKeyPC[]
         ).join(', '),
     },
     /**
@@ -369,6 +370,11 @@ export const OPaginationPC =  defineComponent({
             jumper: h(Jumper, {
                 size: props.small ? 'small' : 'default',
             }),
+            display: h(Display, {
+                disabled: props.disabled,
+                currentPage: currentPageBridge.value,
+                pageCount: pageCountBridge.value,
+            }),
             pager: h(Pager, {
                 currentPage: currentPageBridge.value,
                 pageCount: pageCountBridge.value,
@@ -391,7 +397,6 @@ export const OPaginationPC =  defineComponent({
                 size: props.small ? 'small' : 'default',
                 // onChange: handleSizeChange,
             }),
-            slot: slots?.default?.() ?? null,
             total: h(Total, { total: isAbsent(props.total) ? 0 : props.total }),
             }
 

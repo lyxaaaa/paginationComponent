@@ -5,14 +5,11 @@
                 :total="totalItems"
                 :page-sizes="opageSizes"
                 :current-page="ocurrentPage"
-                layout="total,sizes,prev,pager,next,slot,jumper"
+                layout="total,sizes,prev,pager,next,display,jumper"
                 :page-size="opageSize"
                 @current-change="handleCurrentChange"
                 @size-change="handleSizeChange"
             >
-            <div class="oPaginationSlot">
-                {{ ocurrentPage }}/{{ Math.ceil(totalItems/opageSize) }}
-            </div>
             </OPaginationPC>
         </div>
         <div class="paginationMo">
