@@ -44,7 +44,6 @@ type LayoutKeyPC =
     | 'pager'
     | 'next'
     | 'jumper'
-    | 'total'
     | 'sizes'
     | 'display'
 
@@ -103,7 +102,7 @@ export const paginationPropsPC = {
     layout: {
         type: String,
         default: (
-        [ 'total', 'prev', 'pager', 'next','display', 'jumper'] as LayoutKeyPC[]
+        [ 'sizes', 'prev', 'pager', 'next','display', 'jumper'] as LayoutKeyPC[]
         ).join(', '),
     },
     /**
@@ -397,7 +396,6 @@ export const OPaginationPC =  defineComponent({
                 size: props.small ? 'small' : 'default',
                 // onChange: handleSizeChange,
             }),
-            total: h(Total, { total: isAbsent(props.total) ? 0 : props.total }),
             }
 
             const components = props.layout

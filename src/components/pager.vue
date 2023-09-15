@@ -210,31 +210,33 @@ function onPagerClick(event: UIEvent) {
     const target = event.target as HTMLElement
     //因部分li元素嵌套子元素，使得target不能始终指向li元素，故特使用closest('li')
     const liElement = target.closest('li') as HTMLElement
-    if (liElement.tagName.toLowerCase() === 'ul' || props.disabled) {
-        return
-    }
-    let newPage = Number(liElement.textContent)
-    const pageCount = props.pageCount!
-    const currentPage = props.currentPage
-    const pagerCountOffset = props.pagerCount - 2
-    if (liElement.className.includes('pagerMore')) {
-        if (liElement.className.includes('quickPrev')) {
-            newPage = currentPage - pagerCountOffset
-        } else if (liElement.className.includes('quickNext')) {
-            newPage = currentPage + pagerCountOffset
+    if(liElement!==null) {
+        if (liElement.tagName.toLowerCase() === 'ul' || props.disabled) {
+            return
         }
-    }
-    //边界测试
-    if (!Number.isNaN(+newPage)) {
-        if (newPage < 1) {
-            newPage = 1
+        let newPage = Number(liElement.textContent)
+        const pageCount = props.pageCount!
+        const currentPage = props.currentPage
+        const pagerCountOffset = props.pagerCount - 2
+        if (liElement.className.includes('pagerMore')) {
+            if (liElement.className.includes('quickPrev')) {
+                newPage = currentPage - pagerCountOffset
+            } else if (liElement.className.includes('quickNext')) {
+                newPage = currentPage + pagerCountOffset
+            }
         }
-        if (newPage > pageCount) {
-            newPage = pageCount
+        //边界测试
+        if (!Number.isNaN(+newPage)) {
+            if (newPage < 1) {
+                newPage = 1
+            }
+            if (newPage > pageCount) {
+                newPage = pageCount
+            }
         }
-    }
-    if (newPage !== currentPage) {
-        emit('change', newPage)
+        if (newPage !== currentPage) {
+            emit('change', newPage)
+        }
     }
 }
 </script>

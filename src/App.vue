@@ -5,7 +5,7 @@
                 :total="totalItems"
                 :page-sizes="opageSizes"
                 :current-page="ocurrentPage"
-                layout="total,sizes,prev,pager,next,display,jumper"
+                layout="sizes,prev,pager,next,display,jumper"
                 :page-size="opageSize"
                 @current-change="handleCurrentChange"
                 @size-change="handleSizeChange"
