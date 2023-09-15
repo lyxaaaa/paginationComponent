@@ -1,5 +1,5 @@
 import type { Component, ExtractPropTypes, PropType } from 'vue'
-import type Prev from './prev.vue'
+import type Prev from './Prev.vue'
 
 export const definePropType = <T>(val: any): PropType<T> => val
 

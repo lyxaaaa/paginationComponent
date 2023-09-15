@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import { useLocale } from '../hooks/useLocale'
 import { usePagination } from '../usePagination'
-import { paginationTotalProps } from './total'
+import { paginationTotalProps } from './Total'
 
 const { t } = useLocale()
 const { disabled } = usePagination()

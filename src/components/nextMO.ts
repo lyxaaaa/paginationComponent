@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type NextMO from './nextMO.vue'
+import type NextMO from './NextMO.vue'
 
 export const paginationNextMOProps = {
     disabled: Boolean,

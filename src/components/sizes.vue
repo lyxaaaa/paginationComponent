@@ -1,6 +1,6 @@
 <template>
     <span class="opaginationSizesPc">
-        <div class="sizesPcWrapper" @click="toggleDropdown" ref="selectBox">
+        <div ref="selectBox" class="sizesPcWrapper" @click="toggleDropdown">
             <input 
                 type="text"
                 :validate-event="false"
@@ -11,9 +11,12 @@
                 class="sizesPcInput"
             >
             <span class="sizesPcDownIcon">
-                <i :class="['sizesPcIconSize', {'sizesPcIsReverse': isDropdownOpen}]">
-                    <img src="/src/assets/ArrowDown.svg" alt="" class="sizesPcArrowTransition"/>
-                </i>
+                <OPaginationIcon :class="['sizesPcIconSize', {'sizesPcIsReverse': isDropdownOpen}]">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                        <path fill="currentColor" d="M831.872 340.864 512 652.672 192.128 340.864a30.592 30.592 0 0 0-42.752 0 29.12 29.12 0 0 0 0 41.6L489.664 714.24a32 32 0 0 0 44.672 0l340.288-331.712a29.12 29.12 0 0 0 0-41.728 30.592 30.592 0 0 0-42.752 0z">
+                        </path>
+                    </svg>
+                </OPaginationIcon>
             </span>
         </div>
         <transition name="sizesPcDropDown">
@@ -35,7 +38,8 @@
 import { useLocale } from '../hooks/useLocale'
 import { computed, onMounted, ref, watch } from 'vue'
 import { usePagination } from '../usePagination'
-import { paginationSizesProps } from './sizes'
+import { paginationSizesProps } from './Sizes'
+import OPaginationIcon from '../assets/OPaginationIcon.vue'
 
 defineOptions({
     name: 'OPaginationSizes',
@@ -134,19 +138,18 @@ function handleChange(event: Event) {
         }
         .sizesPcDownIcon {
             display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: inherit;
             white-space: nowrap;
             flex-shrink: 0;
             flex-wrap: nowrap;
             height: 100%;
             text-align: center;
-            color: #a8abb2;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: inherit;
+            color: #000000;
+            transition: all 0.3s;            
             .sizesPcIconSize {
-                width: 14px;
+                font-size: 14px;
                 transition: all 0.3s ease;
             }
             .sizesPcIsReverse {

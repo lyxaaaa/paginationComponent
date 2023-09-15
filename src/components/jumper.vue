@@ -29,7 +29,7 @@
 import { computed, ref } from 'vue'
 import { useLocale } from '../hooks/useLocale'
 import { usePagination } from '../usePagination'
-import { paginationJumperProps } from './jumper'
+import { paginationJumperProps } from './Jumper'
 
 defineOptions({
     name: 'OPaginationJumper',

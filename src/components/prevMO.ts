@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type PrevMO from './prevMO.vue'
+import type PrevMO from './PrevMO.vue'
 
 export const paginationPrevMOProps = {
     disabled: Boolean,

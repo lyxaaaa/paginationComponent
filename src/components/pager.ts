@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type Pager from './pager.vue'
+import type Pager from './Pager.vue'
 
 export const paginationPagerProps = {
     currentPage: {

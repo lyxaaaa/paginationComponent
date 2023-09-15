@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type Sizes from './sizes.vue'
+import type Sizes from './Sizes.vue'
 
 const componentSizes = ['', 'default', 'small', 'large'] as const
 

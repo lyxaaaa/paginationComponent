@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type Total from './total.vue'
+import type Total from './Total.vue'
 
 export const paginationTotalProps = {
     total: {

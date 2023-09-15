@@ -19,8 +19,19 @@
             @focus="onFocus(true)"
             @blur="quickPrevFocus = false"
         >
-            <ArrowDoubleLeft v-if="(quickPrevHover || quickPrevFocus) && !disabled" />
-            <Morefilled v-else />
+            <OPaginationIcon v-if="(quickPrevHover || quickPrevFocus) && !disabled">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="14" height="14">
+                    <path fill="currentColor" d="M609.408 149.376 277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0 30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0-41.728 0z"></path>
+                    <rect x="400" y="320" width="64" height="384" fill="none"></rect>
+                    <path fill="currentColor" d="M609.408 149.376 277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0 30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0-41.728 0z" transform="translate(224 0)"></path>
+                </svg>
+            </OPaginationIcon>
+            <OPaginationIcon v-else>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="14" height="14">
+                    <path fill="currentColor" d="M176 416a112 112 0 1 1 0 224 112 112 0 0 1 0-224zm336 0a112 112 0 1 1 0 224 112 112 0 0 1 0-224zm336 0a112 112 0 1 1 0 224 112 112 0 0 1 0-224z">
+                    </path>
+                </svg>
+            </OPaginationIcon>
         </li>
         <li
             v-for="pager in pagers"
@@ -42,8 +53,19 @@
             @focus="onFocus()"
             @blur="quickNextFocus = false"
         >
-            <ArrowDoubleRight v-if="(quickNextHover || quickNextFocus) && !disabled" />
-            <Morefilled v-else />
+            <OPaginationIcon v-if="(quickNextHover || quickNextFocus) && !disabled">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="14" height="14">
+                    <path fill="currentColor" d="M414.592 149.376 746.24 489.6a32 32 0 0 0 0 44.672l-331.648 340.352a29.12 29.12 0 0 0-41.728 0 30.592 30.592 0 0 0 0-42.752L684.736 511.936l-311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0 41.728 0z"></path>
+                    <rect x="400" y="320" width="64" height="384" fill="none"></rect>
+                    <path fill="currentColor" d="M414.592 149.376 746.24 489.6a32 32 0 0 0 0 44.672l-331.648 340.352a29.12 29.12 0 0 0-41.728 0 30.592 30.592 0 0 0 0-42.752L684.736 511.936l-311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0 41.728 0z" transform="translate(224 0)"></path>
+                </svg>
+            </OPaginationIcon>
+            <OPaginationIcon v-else>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="14" height="14">
+                    <path fill="currentColor" d="M176 416a112 112 0 1 1 0 224 112 112 0 0 1 0-224zm336 0a112 112 0 1 1 0 224 112 112 0 0 1 0-224zm336 0a112 112 0 1 1 0 224 112 112 0 0 1 0-224z">
+                    </path>
+                </svg>
+            </OPaginationIcon>
         </li>
         <li
             v-if="pageCount > 1"
@@ -60,10 +82,8 @@
 <script lang="ts" setup>
 import { computed, ref, watchEffect } from 'vue'
 import { useLocale } from '../hooks/useLocale'
-import { paginationPagerProps } from './pager'
-import Morefilled from '../assets/morefilled.vue'
-import ArrowDoubleLeft from '../assets/arrowDoubleLeft.vue'
-import ArrowDoubleRight from '../assets/arrowDoubleRight.vue'
+import { paginationPagerProps } from './Pager'
+import OPaginationIcon from '../assets/OPaginationIcon.vue'
 
 defineOptions
 ({
@@ -125,12 +145,12 @@ const pagers = computed(() => {
 
 const prevMoreKls = computed(() => [
     'pagerMore',
-    'btnQuickPrev',
+    'quickPrev',
 ])
 
 const nextMoreKls = computed(() => [
     'pagerMore',
-    'btnQuickNext',
+    'quickNext',
 ])
 
 const tabindex = computed(() => (props.disabled ? -1 : 0))
@@ -190,7 +210,6 @@ function onPagerClick(event: UIEvent) {
     const target = event.target as HTMLElement
     //因部分li元素嵌套子元素，使得target不能始终指向li元素，故特使用closest('li')
     const liElement = target.closest('li') as HTMLElement
-    console.log('onPagerClick',target,liElement)
     if (liElement.tagName.toLowerCase() === 'ul' || props.disabled) {
         return
     }
@@ -199,9 +218,9 @@ function onPagerClick(event: UIEvent) {
     const currentPage = props.currentPage
     const pagerCountOffset = props.pagerCount - 2
     if (liElement.className.includes('pagerMore')) {
-        if (liElement.className.includes('quickprev')) {
+        if (liElement.className.includes('quickPrev')) {
             newPage = currentPage - pagerCountOffset
-        } else if (liElement.className.includes('quicknext')) {
+        } else if (liElement.className.includes('quickNext')) {
             newPage = currentPage + pagerCountOffset
         }
     }

@@ -10,8 +10,13 @@
         >
             {{ t('pagination.nextmo') }}
         </button>
-        <span class="nextMoIconSize">
-            <img src="/src/assets/ArrowRight.svg" class="nextMoImgSize"/>
+        <span :class="['nextMoIconWrapper', {'nextMoIconWrapperDisabled': internalDisabled}]">
+            <OPaginationIcon class="nextMoIconSize">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M340.864 149.312a30.592 30.592 0 0 0 0 42.752L652.736 512 340.864 831.872a30.592 30.592 0 0 0 0 42.752 29.12 29.12 0 0 0 41.728 0L714.24 534.336a32 32 0 0 0 0-44.672L382.592 149.376a29.12 29.12 0 0 0-41.728 0z">
+                    </path>
+                </svg>
+            </OPaginationIcon>
         </span>
     </span>
 </template>
@@ -19,7 +24,8 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useLocale } from '../hooks/useLocale'
-import { paginationNextMOProps } from './nextMO'
+import { paginationNextMOProps } from './NextMO'
+import OPaginationIcon from '../assets/OPaginationIcon.vue'
 
 defineOptions({
     name: 'OPaginationNextMO',
@@ -56,16 +62,19 @@ const internalDisabled = computed(
         cursor: pointer;
     }
     .nextMoBtn:disabled {
-        color: gray;
+        color: #707070;
         cursor: not-allowed;
     }
-    .nextMoIconSize {
-        width: 12px;
-        .nextMoImgSize {
-            width: 100%;
-            height: 100%;
-            color: #7d32ea;
+    .nextMoIconWrapper {
+        display: flex;
+        align-items: center;
+        color: #7d32ea;
+        .nextMoIconSize {
+            font-size: 12px;
         }
+    }
+    .nextMoIconWrapperDisabled {
+        color: #707070;
     }
 }
 </style>

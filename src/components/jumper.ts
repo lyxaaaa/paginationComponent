@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type Jumper from './jumper.vue'
+import type Jumper from './Jumper.vue'
 
 const componentSizes = ['', 'default', 'small', 'large'] as const
 

@@ -8,16 +8,20 @@
     @click="$emit('click', $event)"
 >
     <span v-if="prevText">{{ prevText }}</span>
-    <i class="prevPcArrowIcon" v-else>
-        <img :class="{ 'prevPcGrayedOut': internalDisabled }" src="/src/assets/ArrowLeft.svg" alt=""/>
-    </i>
+    <OPaginationIcon class="prevPcArrowIcon" v-else>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+            <path fill="currentColor" d="M609.408 149.376 277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0 30.592 30.592 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.592 30.592 0 0 0 0-42.688 29.12 29.12 0 0 0-41.728 0z">
+            </path>
+        </svg>
+    </OPaginationIcon>
 </button>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useLocale } from '../hooks/useLocale'
-import { paginationPrevEmits, paginationPrevProps } from './prev'
+import { paginationPrevEmits, paginationPrevProps } from './Prev'
+import OPaginationIcon from '../assets/OPaginationIcon.vue'
 
 defineOptions({
     name: 'OPaginationPrev',
@@ -38,13 +42,6 @@ const internalDisabled = computed(
     display: block;
     font-size: 12px;
     font-weight: bold;
-    width: 12px;
-}
-.prevPcGrayedOut {
-    filter: brightness(0.7); /* 0.7 是亮度的百分比值，可根据需要进行调整 */
-}
-.prevPcGrayedOut path {
-    fill: #a8abb2;
 }
 .oPaginationPrevPc {
     display: flex;

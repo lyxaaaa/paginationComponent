@@ -1,5 +1,5 @@
 import type { Component, ExtractPropTypes, PropType } from 'vue'
-import type Next from './next.vue'
+import type Next from './Next.vue'
 
 export const definePropType = <T>(val: any): PropType<T> => val
 

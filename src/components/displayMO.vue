@@ -23,7 +23,7 @@
 import { computed, ref } from 'vue'
 import { useLocale } from '../hooks/useLocale'
 import { usePagination } from '../usePagination'
-import { paginationDisplayMOProps } from './displayMO'
+import { paginationDisplayMOProps } from './DisplayMO'
 
 defineOptions({
     name: 'OPaginationDisplayMO',

@@ -9,23 +9,21 @@ import {
     Component,
     PropType
 } from 'vue'
-import ArrowLeft from './assets/icon/ArrowLeft.vue'
-import ArrowRight from './assets/icon/ArrowRight.vue'
 import { OPaginationKey } from './constants'
 import './test.scss'
 
 //PC端
-import Prev from './components/prev.vue'
-import Next from './components/next.vue'
-import Sizes from './components/sizes.vue'
-import Jumper from './components/jumper.vue'
-import Total from './components/total.vue'
-import Pager from './components/pager.vue'
+import Prev from './components/Prev.vue'
+import Next from './components/Next.vue'
+import Sizes from './components/Sizes.vue'
+import Jumper from './components/Jumper.vue'
+import Total from './components/Total.vue'
+import Pager from './components/Pager.vue'
 
 //移动端
-import PrevMO from './components/prevMO.vue' 
-import NextMO from './components/nextMO.vue'
-import DisplayMO from './components/displayMO.vue'
+import PrevMO from './components/PrevMO.vue' 
+import NextMO from './components/NextMO.vue'
+import DisplayMO from './components/DisplayMO.vue'
 
 import type { ExtractPropTypes, VNode } from 'vue'
 
@@ -126,7 +124,6 @@ export const paginationPropsPC = {
      */
     prevIcon: {
         type: iconPropType,
-        default: () => ArrowLeft,
     },
     /**
      * @description next按钮的文字值
@@ -140,7 +137,6 @@ export const paginationPropsPC = {
      */
     nextIcon: {
         type: iconPropType,
-        default: () => ArrowRight,
     },
     /**
      * @description 是否使用小型分页器

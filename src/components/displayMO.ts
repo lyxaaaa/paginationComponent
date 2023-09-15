@@ -1,5 +1,5 @@
 import type { ExtractPropTypes } from 'vue'
-import type DisplayMO from './displayMO.vue'
+import type DisplayMO from './DisplayMO.vue'
 
 export const paginationDisplayMOProps = {
     disabled: Boolean,
