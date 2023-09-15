@@ -1,14 +1,14 @@
 <template>
     <button
         type="button"
-        class="btn-next"
+        class="oPaginationBtnNext"
         :disabled="internalDisabled"
         :aria-label="nextText || t('pagination.next')"
         :aria-disabled="internalDisabled"
         @click="$emit('click', $event)"
     >
         <span v-if="nextText">{{ nextText }}</span>
-        <i class="o-arrowicon" v-else>
+        <i class="nextPcArrowIcon" v-else>
             <img src="/src/assets/ArrowRight.svg" alt=""/>
         </i>
     </button>
@@ -38,13 +38,13 @@ const internalDisabled = computed(
 </script>
 
 <style scoped> 
-.o-arrowicon {
+.nextPcArrowIcon {
     display: block;
     font-size: 12px;
     font-weight: bold;
     width: 12px;
 }
-.btn-next {
+.oPaginationBtnNext {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,7 +64,7 @@ const internalDisabled = computed(
     cursor: pointer;
     margin-left: 4px;
 }
-.btn-next:disabled {
+.oPaginationBtnNext:disabled {
     cursor: not-allowed;
     background-color: #e5e5e5;
     color: #a8abb2;

@@ -1,9 +1,9 @@
 <template>
-    <span class="dismo-coontain">
+    <span class="oPaginationDisMoContain">
         <input 
             type="number"
             ref="userInput"
-            class="dismo-input"
+            class="disMoInput"
             :value="currentPage"
             :min="1"
             :max="pageCount"
@@ -14,8 +14,8 @@
             @keydown.enter="handleJump"
             @blur="handleJump"
         >
-        <span class="dismo-division">/</span>
-        <span class="dismo-pageCount">{{ pageCount }}</span>
+        <span class="disMoDivision">/</span>
+        <span class="disMoPageCount">{{ pageCount }}</span>
     </span>
 </template>
 
@@ -49,7 +49,7 @@ function handleJump(event: Event) {
 </script>
 
 <style lang="scss" scoped>
-.dismo-coontain {
+.oPaginationDisMoContain {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -57,7 +57,7 @@ function handleJump(event: Event) {
     text-align: center;
     font-size: 12px;
     cursor: default;
-    .dismo-input {
+    .disMoInput {
         width: 20px;
         height: 14px;
         outline: none;
@@ -71,7 +71,7 @@ function handleJump(event: Event) {
         color: #7d32ea;
         font-size: 100%;
     }
-    .dismo-input:focus {
+    .disMoInput:focus {
         border: 1px solid #7d32ea;
     }
     input[type=number] {
@@ -82,10 +82,10 @@ function handleJump(event: Event) {
         -webkit-appearance: none;
         margin: 0;
     }
-    .dismo-division {
+    .disMoDivision {
         margin: 0 4px;
     }
-    .dismo-pageCount {
+    .disMoPageCount {
         white-space: nowrap;
         font-size: 100%;
     }

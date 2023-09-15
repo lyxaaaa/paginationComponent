@@ -1,11 +1,11 @@
 <template>
-<span class="opagination-jump" :disabled="disabled">
-    <span class="opagination-goto">{{ t('pagination.goto') }}</span>
-    <div class="opagination-jump-input">
-        <div class="opaination-wrapInput">
+<span class="oPaginationJump" :disabled="disabled">
+    <span class="jumpPcGoto">{{ t('pagination.goto') }}</span>
+    <div class="jumpPcInputBox">
+        <div class="jumpPcWrapInput">
             <input
                 ref="userInput"
-                class="opagination-innerInput"
+                class="jumpPcInnerInput"
                 :value="currentPage"
                 :min="1"
                 :max="pageCount"
@@ -19,7 +19,7 @@
             />
         </div>
     </div>
-    <span class="opagination-page">{{
+    <span class="jumpPcCurrentPage">{{
         t('pagination.pageClassifier')
     }}</span>
 </span>
@@ -57,7 +57,7 @@ function handleChange(event: Event) {
 </script>
 
 <style lang="scss" scoped>
-.opagination-jump {
+.oPaginationJump {
     display: flex;
     align-items: center;
     height: 36px;
@@ -67,11 +67,11 @@ function handleChange(event: Event) {
     border-radius: 0;
     margin-left: 24px;
     color: #999999;
-    .opagination-goto {
+    .jumpPcGoto {
         margin-right: 8px;
         white-space: nowrap;
     }
-    .opagination-jump-input {
+    .jumpPcInputBox {
         display: inline-flex;
         justify-content: center !important;
         text-align: center;
@@ -81,7 +81,7 @@ function handleChange(event: Event) {
         position: relative;
         font-size: 14px;
         line-height: 32px;
-        .opaination-wrapInput {
+        .jumpPcWrapInput {
             width: 70%;
             display: inline-flex;
             flex-grow: 0.273;
@@ -96,7 +96,7 @@ function handleChange(event: Event) {
             border-radius: 0px;
             box-shadow: none;
             height: 36px;
-            .opagination-innerInput {
+            .jumpPcInnerInput {
                 display: inline-flex;
                 justify-content: center;
                 align-items: center;
@@ -122,7 +122,7 @@ function handleChange(event: Event) {
             }
         }
     }
-    .opagination-page {
+    .jumpPcCurrentPage {
         margin-left: 8px;
     }
 }

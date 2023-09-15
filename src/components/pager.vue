@@ -1,8 +1,8 @@
 <template>
-    <ul @click="onPagerClick" @keyup.enter="onEnter" class="o-pagination-pager">
+    <ul @click="onPagerClick" @keyup.enter="onEnter" class="oPaginationPagerPc">
         <li
             v-if="pageCount > 0"
-            :class="['number',{'activePage' : currentPage === 1}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === 1}]"
             :aria-current="currentPage === 1"
             :aria-label="t('pagination.currentPage', { pager: 1 })"
             :tabindex="tabindex"
@@ -25,7 +25,7 @@
         <li
             v-for="pager in pagers"
             :key="pager"
-            :class="['number',{'activePage' : currentPage === pager}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pager}]"
             :aria-current="currentPage === pager"
             :aria-label="t('pagination.currentPage', { pager })"
             :tabindex="tabindex"
@@ -47,7 +47,7 @@
         </li>
         <li
             v-if="pageCount > 1"
-            :class="['number',{'activePage' : currentPage === pageCount}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pageCount}]"
             :aria-current="currentPage === pageCount"
             :aria-label="t('pagination.currentPage', { pager: pageCount })"
             :tabindex="tabindex"
@@ -124,13 +124,13 @@ const pagers = computed(() => {
 })
 
 const prevMoreKls = computed(() => [
-    'more',
-    'btn-quickprev',
+    'pagerMore',
+    'btnQuickPrev',
 ])
 
 const nextMoreKls = computed(() => [
-    'more',
-    'btn-quicknext',
+    'pagerMore',
+    'btnQuickNext',
 ])
 
 const tabindex = computed(() => (props.disabled ? -1 : 0))
@@ -172,7 +172,7 @@ function onEnter(e: UIEvent) {
     const target = e.target as HTMLElement
     if (
         target.tagName.toLowerCase() === 'li' &&
-        Array.from(target.classList).includes('number')
+        Array.from(target.classList).includes('pagerPcNumber')
     ) {
             const newPage = Number(target.textContent)
             if (newPage !== props.currentPage) {
@@ -180,7 +180,7 @@ function onEnter(e: UIEvent) {
         }
     } else if (
         target.tagName.toLowerCase() === 'li' &&
-        Array.from(target.classList).includes('more')
+        Array.from(target.classList).includes('pagerMore')
     ) {
             onPagerClick(e)
     }
@@ -198,7 +198,7 @@ function onPagerClick(event: UIEvent) {
     const pageCount = props.pageCount!
     const currentPage = props.currentPage
     const pagerCountOffset = props.pagerCount - 2
-    if (liElement.className.includes('more')) {
+    if (liElement.className.includes('pagerMore')) {
         if (liElement.className.includes('quickprev')) {
             newPage = currentPage - pagerCountOffset
         } else if (liElement.className.includes('quicknext')) {
@@ -221,7 +221,7 @@ function onPagerClick(event: UIEvent) {
 </script>
 
 <style lang="scss" scoped>
-.o-pagination-pager {
+.oPaginationPagerPc {
     user-select: none;
     list-style: none;
     padding: 0;
@@ -254,7 +254,7 @@ function onPagerClick(event: UIEvent) {
             height: 100%;
         }
     }
-    .activePage {
+    .pagerPcActivePage {
         color: #ffffff;
         background-color: #7d32ea;
     }

@@ -1,11 +1,11 @@
 <template>
-    <span class="prevmo-contain">
-        <span class="icon-size">
-            <img src="/src/assets/ArrowLeft.svg" class="premo-img"/>
+    <span class="oPaginationPrevMo">
+        <span class="pevMoIconSize">
+            <img src="/src/assets/ArrowLeft.svg" class="prevMoImgSize"/>
         </span>
         <button 
             type="button"
-            class="prevmo-btn"
+            class="prevMoBtn"
             :disabled="internalDisabled"
             :aria-label="t('pagination.prev')"
             :aria-disabled="internalDisabled"
@@ -37,20 +37,20 @@ const internalDisabled = computed(
 </script>
 
 <style lang="scss" scoped>
-.prevmo-contain {
+.oPaginationPrevMo {
     display: flex;
     flex-direction: row;
     align-items: center;
-    .icon-size {
+    .pevMoIconSize {
         width: 12px;
         margin-right: 8px;
-        .premo-img {
+        .prevMoImgSize {
             width: 100%;
             height: 100%;
             color: #7d32ea;
         }
     }
-    .prevmo-btn {
+    .prevMoBtn {
         outline: none;
         border: none;
         font-size: 12px;
@@ -60,7 +60,7 @@ const internalDisabled = computed(
         white-space: nowrap;
         cursor: pointer;
     }
-    .prevmo-btn:disabled {
+    .prevMoBtn:disabled {
         color: gray;
         cursor: not-allowed;
     }

@@ -1,5 +1,5 @@
 <template>
-<span class="opagination-total" :disabled="disabled">
+<span class="oPaginationTotalPc" :disabled="disabled">
     {{
         `${t('pagination.total')}: ${total}`
     }}
@@ -23,7 +23,7 @@ const total = props.total
 </script>
 
 <style lang="scss" scoped>
-.opagination-total {
+.oPaginationTotalPc {
     display: flex;
     flex-direction: row;
     align-items: center;

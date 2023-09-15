@@ -1,15 +1,15 @@
 <template>
 <button
     type="button"
-    class="btn-prev"
+    class="oPaginationPrevPc"
     :disabled="internalDisabled"
     :aria-label="prevText || t('pagination.prev')"
     :aria-disabled="internalDisabled"
     @click="$emit('click', $event)"
 >
     <span v-if="prevText">{{ prevText }}</span>
-    <i class="o-arrowicon" v-else>
-        <img src="/src/assets/ArrowLeft.svg" />
+    <i class="prevPcArrowIcon" v-else>
+        <img :class="{ 'prevPcGrayedOut': internalDisabled }" src="/src/assets/ArrowLeft.svg" alt=""/>
     </i>
 </button>
 </template>
@@ -34,13 +34,19 @@ const internalDisabled = computed(
 </script>
 
 <style scoped> 
-.o-arrowicon {
+.prevPcArrowIcon {
     display: block;
     font-size: 12px;
     font-weight: bold;
     width: 12px;
 }
-.btn-prev {
+.prevPcGrayedOut {
+    filter: brightness(0.7); /* 0.7 是亮度的百分比值，可根据需要进行调整 */
+}
+.prevPcGrayedOut path {
+    fill: #a8abb2;
+}
+.oPaginationPrevPc {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,7 +66,7 @@ const internalDisabled = computed(
     cursor: pointer;
     margin-right: 4px;
 }
-.btn-prev:disabled {
+.oPaginationPrevPc:disabled {
     cursor: not-allowed;
     background-color: #e5e5e5;
     color: #a8abb2;

@@ -1,6 +1,6 @@
 <template>
-    <span class="opagination-sizes">
-        <div class="o-sizes-wrapper" @click="toggleDropdown" ref="selectBox">
+    <span class="opaginationSizesPc">
+        <div class="sizesPcWrapper" @click="toggleDropdown" ref="selectBox">
             <input 
                 type="text"
                 :validate-event="false"
@@ -8,20 +8,20 @@
                 :value="`${innerPageSize} ${t('pagination.pagesize')}`"
                 :disabled="disabled"
                 readonly
-                class="o-sizes-input"
+                class="sizesPcInput"
             >
-            <span class="o-sizes-downIcon">
-                <i :class="['o-sizes-iconSize', {'is-reverse': isDropdownOpen}]">
-                    <img src="/src/assets/ArrowDown.svg" alt="" class="arrowTransition"/>
+            <span class="sizesPcDownIcon">
+                <i :class="['sizesPcIconSize', {'sizesPcIsReverse': isDropdownOpen}]">
+                    <img src="/src/assets/ArrowDown.svg" alt="" class="sizesPcArrowTransition"/>
                 </i>
             </span>
         </div>
-        <transition name="drop-down">
-            <ul v-show="isDropdownOpen" class="o-sizes-options">
+        <transition name="sizesPcDropDown">
+            <ul v-show="isDropdownOpen" class="sizesPcOptions">
                 <li
                     v-for="item in innerPageSizes"
                     :key="item"
-                    :class="['o-sizes-option', { 'selectedOption': item === innerPageSize }]"
+                    :class="['sizesPcOptionStyle', { 'sizesPcSelectedOption': item === innerPageSize }]"
                     @click="handleSelectSize(item)"
                 >
                     {{ `${item} ${t('pagination.pagesize')}` }}
@@ -103,13 +103,13 @@ function handleChange(event: Event) {
 </script>
 
 <style lang="scss" scoped>
-.opagination-sizes {
+.opaginationSizesPc {
     height: 36px;
     margin-right: 8px;
     box-sizing: border-box;
     padding: 1px 11px;
     cursor: pointer;
-    .o-sizes-wrapper {
+    .sizesPcWrapper {
         width: 128px;
         height: 36px;
         display: flex;
@@ -118,7 +118,7 @@ function handleChange(event: Event) {
         align-items: center;
         background-color: #e5e5e5;
         margin-bottom: 6px;
-        .o-sizes-input {
+        .sizesPcInput {
             cursor: pointer;
             width: 84px;
             height: 30px;
@@ -132,7 +132,7 @@ function handleChange(event: Event) {
             background: none;
             box-sizing: border-box;
         }
-        .o-sizes-downIcon {
+        .sizesPcDownIcon {
             display: inline-flex;
             white-space: nowrap;
             flex-shrink: 0;
@@ -145,16 +145,16 @@ function handleChange(event: Event) {
             align-items: center;
             justify-content: center;
             box-sizing: inherit;
-            .o-sizes-iconSize {
+            .sizesPcIconSize {
                 width: 14px;
                 transition: all 0.3s ease;
             }
-            .is-reverse {
+            .sizesPcIsReverse {
                 transform: rotateZ(-180deg);
             }
         }
     }
-    .o-sizes-options {
+    .sizesPcOptions {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -167,7 +167,7 @@ function handleChange(event: Event) {
         width: 128px;
         z-index: 2;
         background-color: #ffffff;
-        .o-sizes-option {
+        .sizesPcOptionStyle {
             display: inline-flex;
             align-items: center;
             width: 100%;
@@ -181,27 +181,27 @@ function handleChange(event: Event) {
                 color: #7d6aed;
             }
         }
-        .selectedOption {
+        .sizesPcSelectedOption {
             color: #7d6aed;
             background-color: #f5f6f8;
         }
     }
     
-    .drop-down-enter-active,
-    .drop-down-leave-active {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+    .sizesPcDropDown-enter-active,
+    .sizesPcDropDown-leave-active {
+    transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out; 
     }
-    .drop-down-enter-from {
+    .sizesPcDropDown-enter-from {
     opacity: 0;
     transform: scaleY(0);
     transform-origin: top; 
     }
-    .drop-down-enter-to {
+    .sizesPcDropDown-enter-to {
     opacity: 1;
     transform: scaleY(1);
     transform-origin: top; 
     }
-    .drop-down-leave-to {
+    .sizesPcDropDown-leave-to {
     opacity: 0;
     transform: scaleY(0);
     transform-origin: top; 

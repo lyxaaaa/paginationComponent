@@ -1,8 +1,8 @@
 <template>
-    <span class="nextmo-contain">
+    <span class="oPaginationNextMo">
         <button 
             type="button"
-            class="nextmo-btn"
+            class="nextMoBtn"
             :disabled="internalDisabled"
             :aria-label="t('pagination.next')"
             :aria-disabled="internalDisabled"
@@ -10,8 +10,8 @@
         >
             {{ t('pagination.nextmo') }}
         </button>
-        <span class="iconNext-size">
-            <img src="/src/assets/ArrowRight.svg" class="nextmo-img"/>
+        <span class="nextMoIconSize">
+            <img src="/src/assets/ArrowRight.svg" class="nextMoImgSize"/>
         </span>
     </span>
 </template>
@@ -40,11 +40,11 @@ const internalDisabled = computed(
 </script>
 
 <style lang="scss" scoped>
-.nextmo-contain {
+.oPaginationNextMo {
     display: flex;
     flex-direction: row;
     align-items: center;
-    .nextmo-btn {
+    .nextMoBtn {
         outline: none;
         border: none;
         font-size: 12px;
@@ -55,13 +55,13 @@ const internalDisabled = computed(
         white-space: nowrap;
         cursor: pointer;
     }
-    .nextmo-btn:disabled {
+    .nextMoBtn:disabled {
         color: gray;
         cursor: not-allowed;
     }
-    .iconNext-size {
+    .nextMoIconSize {
         width: 12px;
-        .nextmo-img {
+        .nextMoImgSize {
             width: 100%;
             height: 100%;
             color: #7d32ea;

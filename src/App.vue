@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="pagination-pc">
+        <div class="paginationPc">
             <OPaginationPC
                 :total="totalItems"
                 :page-sizes="opageSizes"
@@ -10,12 +10,12 @@
                 @current-change="handleCurrentChange"
                 @size-change="handleSizeChange"
             >
-            <div class="opagination-slot">
+            <div class="oPaginationSlot">
                 {{ ocurrentPage }}/{{ Math.ceil(totalItems/opageSize) }}
             </div>
             </OPaginationPC>
         </div>
-        <div class="pagination-mo">
+        <div class="paginationMo">
             <OPaginationMO
                 :total="totalItems"
                 :page-size="10"
@@ -67,20 +67,20 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     background-color: #f5f6f8;
-    .pagination-pc {
+    .paginationPc {
         display: block; // 默认显示 PC 分页组件        
         @media (max-width: 768px) {
             display: none; // 在窄屏幕下隐藏 PC 分页组件
         }
     }
     
-    .pagination-mo {
+    .paginationMo {
         display: none; // 默认隐藏 MO 分页组件        
         @media (max-width: 768px) {
             display: block; // 在窄屏幕下显示 MO 分页组件
         }
     }
-    .opagination-slot {
+    .oPaginationSlot {
         font-size: 14px;
         margin: 0 8px;
     }
