@@ -17,7 +17,6 @@ import Prev from './components/Prev.vue'
 import Next from './components/Next.vue'
 import Sizes from './components/Sizes.vue'
 import Jumper from './components/Jumper.vue'
-import Total from './components/Total.vue'
 import Pager from './components/Pager.vue'
 import Display from './components/Display.vue'
 
@@ -113,36 +112,6 @@ export const paginationPropsPC = {
         default: () => [10, 20, 30, 40, 50, 100] as const,
     },
     /**
-     * @description prev按钮的文字值
-     */
-    prevText: {
-        type: String,
-        default: '',
-    },
-    /**
-     * @description prev按钮的图标，优先级高于`prevText`
-     */
-    prevIcon: {
-        type: iconPropType,
-    },
-    /**
-     * @description next按钮的文字值
-     */
-    nextText: {
-        type: String,
-        default: '',
-    },
-    /**
-     * @description next按钮的图标，优先级高于`nextText`
-     */
-    nextIcon: {
-        type: iconPropType,
-    },
-    /**
-     * @description 是否使用小型分页器
-     */
-    small: Boolean,
-    /**
      * @description 是否分页器被禁用
      */
     disabled: Boolean,
@@ -185,7 +154,6 @@ export const paginationPropsMO = {
      */
     pageCount: {
         type: Number,
-        // default: 1,
     },
     /**
      * @description 每页容量，默认为10
@@ -362,12 +330,10 @@ export const OPaginationPC =  defineComponent({
             prev: h(Prev, {
                 disabled: props.disabled,
                 currentPage: currentPageBridge.value,
-                prevText: props.prevText,
-                prevIcon: props.prevIcon,
                 onClick: prev,
             }),
             jumper: h(Jumper, {
-                size: props.small ? 'small' : 'default',
+                disabled: props.disabled,
             }),
             display: h(Display, {
                 disabled: props.disabled,
@@ -385,15 +351,12 @@ export const OPaginationPC =  defineComponent({
                 disabled: props.disabled,
                 currentPage: currentPageBridge.value,
                 pageCount: pageCountBridge.value,
-                nextText: props.nextText,
-                nextIcon: props.nextIcon,
                 onClick: next,
             }),
             sizes: h(Sizes, {
                 pageSize: pageSizeBridge.value,
                 pageSizes: props.pageSizes,
                 disabled: props.disabled,
-                size: props.small ? 'small' : 'default',
                 // onChange: handleSizeChange,
             }),
             }

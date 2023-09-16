@@ -20,12 +20,6 @@ export const paginationNextProps = {
         type: Number,
         default: 50,
     },
-    nextText: {
-        type: String,
-    },
-    nextIcon: {
-        type: iconPropType,
-    },
 } as const
 
 export type PaginationNextProps = ExtractPropTypes<typeof paginationNextProps>

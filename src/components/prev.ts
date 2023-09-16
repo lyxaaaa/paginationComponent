@@ -15,12 +15,6 @@ export const paginationPrevProps = {
         type: Number,
         default: 1,
     },
-    prevText: {
-        type: String,
-    },
-    prevIcon: {
-        type: iconPropType,
-    },
 } as const
 
 export const paginationPrevEmits = {

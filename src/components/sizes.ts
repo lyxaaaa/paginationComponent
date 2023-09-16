@@ -1,8 +1,6 @@
 import type { ExtractPropTypes } from 'vue'
 import type Sizes from './Sizes.vue'
 
-const componentSizes = ['', 'default', 'small', 'large'] as const
-
 export const paginationSizesProps = {
     pageSize: {
         type: Number,
@@ -13,10 +11,6 @@ export const paginationSizesProps = {
         default: () => [10, 20, 30, 40, 50, 100] as const,
     },
     disabled: Boolean,
-    size: {
-        type: String,
-        values: componentSizes,
-    },
 } as const
 
 export type PaginationSizesProps = ExtractPropTypes<typeof paginationSizesProps>
