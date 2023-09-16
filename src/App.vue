@@ -1,40 +1,31 @@
 <template>
     <div class="container">
-        <div class="paginationPc">
-            <OPaginationPC
-                :total="totalItems"
-                :page-sizes="opageSizes"
-                :current-page="ocurrentPage"
-                layout="sizes,prev,pager,next,display,jumper"
-                :page-size="opageSize"
-                @current-change="handleCurrentChange"
-                @size-change="handleSizeChange"
-            >
-            </OPaginationPC>
-        </div>
-        <div class="paginationMo">
-            <OPaginationMO
-                :total="totalItems"
-                :page-size="10"
-                :current-page="ocurrentPage"
-                @current-change="handleCurrentChange"
-            />
-        </div>
+        <NewPagination
+            :disabled="false"
+            :hideOnSinglePage="false"
+            :simple="true"
+            :total="totalItems"
+            :page-sizes="opageSizes"
+            :current-page="ocurrentPage"
+            :page-size="opageSize"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+        >
+        </NewPagination>
     </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { OPaginationPC, OPaginationMO } from './pagination'
+import { NewPagination } from './pagination'
 
 export default defineComponent({
     components: {
-        OPaginationPC,
-        OPaginationMO,
+        NewPagination
     },
     data() {
         return {
-            totalItems: 500, // 总条目数
+            totalItems: 50, // 总条目数
             opageSize: 10,    // 每页显示的条目数
             ocurrentPage: 1,  // 当前页
             opageSizes: [10, 20, 30, 50], // 每页显示条目数选项
@@ -64,22 +55,5 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     background-color: #f5f6f8;
-    .paginationPc {
-        display: block; // 默认显示 PC 分页组件        
-        @media (max-width: 768px) {
-            display: none; // 在窄屏幕下隐藏 PC 分页组件
-        }
-    }
-    
-    .paginationMo {
-        display: none; // 默认隐藏 MO 分页组件        
-        @media (max-width: 768px) {
-            display: block; // 在窄屏幕下显示 MO 分页组件
-        }
-    }
-    .oPaginationSlot {
-        font-size: 14px;
-        margin: 0 8px;
-    }
 }
 </style>

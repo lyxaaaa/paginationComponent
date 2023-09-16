@@ -27,14 +27,6 @@ import DisplayMO from './components/DisplayMO.vue'
 
 import type { ExtractPropTypes, VNode } from 'vue'
 
-const definePropType = <T>(val: any): PropType<T> => val
-
-const iconPropType = definePropType<string | Component>([
-    String,
-    Object,
-    Function,
-])
-
 const isAbsent = (v: unknown): v is undefined => typeof v !== 'number'
 const isNumber = (val: any): val is number => typeof val === 'number'
 
@@ -51,28 +43,39 @@ type LayoutKeyMO =
     | 'displayMO'
     | 'nextMO'
 
+type LayoutKey = LayoutKeyPC | LayoutKeyMO;
 
-//PC端
-export const paginationPropsPC = {
+
+export const newPaginationProps = {
+    /**
+     * @description 切换PC端和移动端。`simple`为true显示移动端，为false显示PC端。默认为false
+     */
+    simple: {
+        type: Boolean,
+        default: false,
+    },
     /**
      * @description 每页容量
      */
     pageSize: Number,
     /**
-     * @description 默认的每页容量，一般为10
-     */
-    defaultPageSize: Number,
+      * @description 默认的每页容量，一般为10
+      */
+    defaultPageSize: {
+        type: Number,
+        default: 10,
+    },
     /**
-     * @description 数据总量
-     */
+      * @description 数据总量
+      */
     total: Number,
     /**
-     * @description 总页数 （`total`和`page-count`二者选其一即可。若需要`page-sizes`，则必须传递`total`）
-     */
+      * @description 总页数 （`total`和`page-count`二者选其一即可。若需要`page-sizes`，则必须传递`total`）
+      */
     pageCount: Number,
     /**
-     * @description 展示列表的页码数
-     */
+      * @description 展示列表的页码数
+      */
     pagerCount: {
         type: Number,
         //用于验证 number类型，整数，在4-22之间，奇数
@@ -88,41 +91,42 @@ export const paginationPropsPC = {
         default: 7,
     },
     /**
-     * @description 当前页码
-     */
+      * @description 当前页码
+      */
     currentPage: Number,
     /**
-     * @description 默认的当前页码，一般为1
-     */
-    defaultCurrentPage: Number,
-    /**
-     * @description 分页器的拆分组件
-     */
-    layout: {
-        type: String,
-        default: (
-        [ 'sizes', 'prev', 'pager', 'next','display', 'jumper'] as LayoutKeyPC[]
-        ).join(', '),
+      * @description 默认的当前页码，一般为1
+      */
+    defaultCurrentPage: {
+        type: Number,
+        default: 1,
     },
     /**
-     * @description 每页容量的可选值（数组）
-     */
+      * @description 每页容量的可选值（数组）
+      */
     pageSizes: {
         type: Array as () => number[],
         default: () => [10, 20, 30, 40, 50, 100] as const,
     },
     /**
-     * @description 是否分页器被禁用
-     */
-    disabled: Boolean,
+      * @description 是否分页器被禁用，默认为false
+      */
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     /**
-     * @description 当只有一页时，是否隐藏
-     */
-    hideOnSinglePage: Boolean,
+      * @description 当只有一页时，是否隐藏。默认为true
+      */
+    hideOnSinglePage: {
+        type: Boolean,
+        default: true,
+    },
 } as const
-export type PaginationPropsPC = ExtractPropTypes<typeof paginationPropsPC>
+export type NewPaginationProps = ExtractPropTypes<typeof newPaginationProps>
 
-export const paginationEmitsPC = {
+
+export const newPaginationEmits = {
     'update:current-page': (val: number) => isNumber(val),
     'update:page-size': (val: number) => isNumber(val),
     'size-change': (val: number) => isNumber(val),
@@ -130,60 +134,15 @@ export const paginationEmitsPC = {
     'prev-click': (val: number) => isNumber(val),
     'next-click': (val: number) => isNumber(val),
 }
-export type PaginationEmitsPC = typeof paginationEmitsPC
+export type NewPaginationEmits = typeof newPaginationEmits
 
-//移动端
-export const paginationPropsMO = {
-    /**
-     * @description 是否分页器被禁用
-     */
-    disabled: Boolean,
-    /**
-     * @description 数据总量
-     */
-        total: Number,
-    /**
-     * @description 当前页码
-     */
-    currentPage: {
-        type: Number,
-        default: 1,
-    },
-    /**
-     * @description 总页数
-     */
-    pageCount: {
-        type: Number,
-    },
-    /**
-     * @description 每页容量，默认为10
-     */
-    pageSize: {
-        type: Number,
-        default: 10,
-    },
-    /**
-     * @description 当只有一页时，是否隐藏
-     */
-    hideOnSinglePage: Boolean,
-} as const
-export type PaginationPropsMO = ExtractPropTypes<typeof paginationPropsMO>
-
-export const paginationEmitsMO = {
-    'update:current-page': (val: number) => isNumber(val),
-    'current-change': (val: number) => isNumber(val),
-    'prev-click': (val: number) => isNumber(val),
-    'next-click': (val: number) => isNumber(val),
-}
-export type PaginationEmitsMO = typeof paginationEmitsMO
-
-
-export const OPaginationPC =  defineComponent({
-    name: 'OPaginationPC',
-    props: paginationPropsPC,
-    emits: paginationEmitsPC,
+export const NewPagination = defineComponent({
+    name: 'NewPagination',
+    props: newPaginationProps,
+    emits: newPaginationEmits,
     setup(props, { emit,slots }) {
         const vnodeProps = getCurrentInstance()!.vnode.props || {}
+        //监听器判断
         const hasCurrentPageListener =
             'onUpdate:currentPage' in vnodeProps ||
             'onUpdate:current-page' in vnodeProps ||
@@ -198,8 +157,8 @@ export const OPaginationPC =  defineComponent({
             if (isAbsent(props.total) && isAbsent(props.pageCount)) return false
             //存在currentPage，但是没有对应的监视器
             if (!isAbsent(props.currentPage) && !hasCurrentPageListener) return false
-            //当layout包括sizes时判断
-            if (props.layout.includes('sizes')) {
+            //当layout包括sizes时判断（simple为false）
+            if (!props.simple) {
                 if (!isAbsent(props.pageCount)) {
                     if (!hasPageSizeListener) {
                         //如果 pageCount 属性传递了，但没有相应的事件监听器
@@ -208,10 +167,10 @@ export const OPaginationPC =  defineComponent({
                 } 
                 else if (!isAbsent(props.total)) {
                     if (!isAbsent(props.pageSize)) {
-                    if (!hasPageSizeListener) {
-                        //total 和 pageSize 都传递了，但是没有对应监视器
-                        return false
-                    }
+                        if (!hasPageSizeListener) {
+                            //total 和 pageSize 都传递了，但是没有对应监视器
+                            return false
+                        }
                     } else {
                         // for more
                     }
@@ -317,14 +276,13 @@ export const OPaginationPC =  defineComponent({
             if (!assertValidUsage.value) {
                 return null
             }
-            if (!props.layout) return null
             //判断在只有一页时是否隐藏分页器
             if (props.hideOnSinglePage && pageCountBridge.value <= 1) return null
 
             const rootChildren: Array<VNode | VNode[] | null> = []
             //一个映射对象，将布局关键字映射到对应的渲染组件
             const TEMPLATE_MAP: Record<
-                Exclude<LayoutKeyPC, '->'>,
+                LayoutKey,
                 VNode | VNode[] | null
             > = {
             prev: h(Prev, {
@@ -357,173 +315,37 @@ export const OPaginationPC =  defineComponent({
                 pageSize: pageSizeBridge.value,
                 pageSizes: props.pageSizes,
                 disabled: props.disabled,
-                // onChange: handleSizeChange,
+                onChange: handleSizeChange,
+            }),
+            prevMO: h(PrevMO, {
+                disabled: props.disabled,
+                currentPage: currentPageBridge.value,
+                onClick: prev,
+            }),
+            nextMO: h(NextMO, {
+                disabled: props.disabled,
+                currentPage: currentPageBridge.value,
+                pageCount: pageCountBridge.value,
+                onClick: next,
+            }),
+            displayMO: h(DisplayMO, {
+                disabled: props.disabled,
+                currentPage: currentPageBridge.value,
+                pageCount: pageCountBridge.value,
+                pageSize: pageSizeBridge.value,
             }),
             }
 
-            const components = props.layout
-            .split(',')
-            .map((item: string) => item.trim()) as LayoutKeyPC[]
+            const components: LayoutKey[] = [];
 
-            components.forEach((c) => {
-                if ( TEMPLATE_MAP[c] ) {
-                    rootChildren.push(TEMPLATE_MAP[c] as VNode | VNode[] | null);
-                }
-            });
-
-            return h(
-                'div',
-                {
-                    class: [
-                        'test',
-                    ],
-                },
-                rootChildren
-            )
-        }
-    }
-})
-
-export const OPaginationMO = defineComponent({
-    name: 'OPaginationMO',
-    props: paginationPropsMO,
-    emits: paginationEmitsMO,
-    setup(props, { emit }) {
-        const vnodeProps = getCurrentInstance()!.vnode.props || {}
-        const hasCurrentPageListener =
-            'onUpdate:currentPage' in vnodeProps ||
-            'onUpdate:current-page' in vnodeProps ||
-            'onCurrentChange' in vnodeProps
-
-        //合法性校验
-        const assertValidUsage = computed(() => {
-            //total 和 pageCount  两者都没有传递
-            if (isAbsent(props.total) && isAbsent(props.pageCount)) return false
-            //存在currentPage，但是没有对应的监视器
-            if (!isAbsent(props.currentPage) && !hasCurrentPageListener) return false
-            return true
-        })
-
-        const innerPageSize = ref(
-            isAbsent(props.pageSize) ? 10 : props.pageSize
-        )
-        const innerCurrentPage = ref(
-            isAbsent(props.currentPage) ? 1 : props.currentPage
-        )
-
-        const pageSizeBridge = computed({
-            get() {
-                return isAbsent(props.pageSize) ? innerPageSize.value : props.pageSize
-            },
-            set(v: number) {
-                if (isAbsent(props.pageSize)) {
-                    innerPageSize.value = v
-                }
-            },
-        })
-
-        const pageCountBridge = computed<number>(() => {
-            let pageCount = 0
-            if (!isAbsent(props.pageCount)) {
-                pageCount = props.pageCount
-            } else if (!isAbsent(props.total)) {
-                pageCount = Math.max(1, Math.ceil(props.total / pageSizeBridge.value))
+            if(props.simple){
+                //移动端
+                components.push('prevMO', 'displayMO', 'nextMO' );
             }
-            return pageCount
-        })
-
-        const currentPageBridge = computed<number>({
-            get() {
-                return isAbsent(props.currentPage)
-                ? innerCurrentPage.value
-                : props.currentPage
-            },
-            set(v) {
-                let newCurrentPage = v
-                if (v < 1) {
-                    newCurrentPage = 1
-                } else if (v > pageCountBridge.value) {
-                    newCurrentPage = pageCountBridge.value
-                }
-                if (isAbsent(props.currentPage)) {
-                    innerCurrentPage.value = newCurrentPage
-                }
-                if (hasCurrentPageListener) {
-                    emit('update:current-page', newCurrentPage)
-                    emit('current-change', newCurrentPage)
-                }
-            },
-        })
-
-        watch(pageCountBridge, (val) => {
-            if (currentPageBridge.value > val) currentPageBridge.value = val
-        })
-
-        function handleCurrentChange(val: number) {
-            currentPageBridge.value = val
-        }
-
-        function handleSizeChange(val: number) {
-            pageSizeBridge.value = val
-            const newPageCount = pageCountBridge.value
-            if (currentPageBridge.value > newPageCount) {
-                currentPageBridge.value = newPageCount
+            else {
+                //PC端
+                components.push('sizes', 'prev', 'pager', 'next', 'display', 'jumper');
             }
-        }
-
-        function prev() {
-            if (props.disabled) return
-            currentPageBridge.value -= 1            
-            emit('prev-click', currentPageBridge.value)
-        }
-
-        function next() {
-            if (props.disabled) return
-            currentPageBridge.value += 1
-            emit('next-click', currentPageBridge.value)
-        }
-
-        provide(OPaginationKey, {
-            pageCount: pageCountBridge,
-            disabled: computed(() => props.disabled),
-            currentPage: currentPageBridge,
-            changeEvent: handleCurrentChange,
-            // handleSizeChange,
-        })
-
-        return () => {
-            //用于判断组件是否有有效的使用
-            if (!assertValidUsage.value) {
-                return null
-            }
-            //判断在只有一页时是否隐藏分页器
-            if (props.hideOnSinglePage && pageCountBridge.value <= 1) return null
-
-            const rootChildren: Array<VNode | VNode[] | null> = []
-            const TEMPLATE_MAP: Record<
-                Exclude<LayoutKeyMO, '->'>,
-                VNode | VNode[] | null
-            > = {
-                prevMO: h(PrevMO, {
-                    disabled: props.disabled,
-                    currentPage: currentPageBridge.value,
-                    onClick: prev,
-                }),
-                nextMO: h(NextMO, {
-                    disabled: props.disabled,
-                    currentPage: currentPageBridge.value,
-                    pageCount: pageCountBridge.value,
-                    onClick: next,
-                }),
-                displayMO: h(DisplayMO, {
-                    disabled: props.disabled,
-                    currentPage: currentPageBridge.value,
-                    pageCount: pageCountBridge.value,
-                    pageSize: pageSizeBridge.value,
-                })
-            }
-
-            const components = ['prevMO', 'displayMO', 'nextMO'] as LayoutKeyMO[]
 
             components.forEach((c) => {
                 if ( TEMPLATE_MAP[c] ) {
