@@ -1,5 +1,5 @@
 <template>
-    <span class="opaginationSizesPc">
+    <span :class="['opaginationSizesPc',{ 'opaginationSizesPcDisabled': disabled}]">
         <div ref="selectBox" class="sizesPcWrapper" @click="toggleDropdown">
             <input 
                 type="text"
@@ -136,6 +136,10 @@ function handleChange(event: Event) {
             background: none;
             box-sizing: border-box;
         }
+        .sizesPcInput:disabled {
+            cursor: not-allowed;
+            color: #707070;
+        }
         .sizesPcDownIcon {
             display: inline-flex;
             align-items: center;
@@ -209,5 +213,8 @@ function handleChange(event: Event) {
     transform: scaleY(0);
     transform-origin: top; 
     }
+}
+.opaginationSizesPcDisabled {
+    cursor: not-allowed;
 }
 </style>

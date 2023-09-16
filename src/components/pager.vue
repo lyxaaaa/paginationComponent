@@ -2,7 +2,7 @@
     <ul @click="onPagerClick" @keyup.enter="onEnter" class="oPaginationPagerPc">
         <li
             v-if="pageCount > 0"
-            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === 1}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === 1 , 'pagerPcDisabled': disabled }]"
             :aria-current="currentPage === 1"
             :aria-label="t('pagination.currentPage', { pager: 1 })"
             :tabindex="tabindex"
@@ -11,7 +11,7 @@
         </li>
         <li
             v-if="showPrevMore"
-            :class="prevMoreKls"
+            :class="[...prevMoreKls, { 'pagerPcDisabled': disabled }]"
             :tabindex="tabindex"
             :aria-label="t('pagination.prevPages', { pager: pagerCount - 2 })"
             @mouseenter="onMouseEnter(true)"
@@ -36,7 +36,7 @@
         <li
             v-for="pager in pagers"
             :key="pager"
-            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pager}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pager , 'pagerPcDisabled': disabled }]"
             :aria-current="currentPage === pager"
             :aria-label="t('pagination.currentPage', { pager })"
             :tabindex="tabindex"
@@ -45,7 +45,7 @@
         </li>
         <li
             v-if="showNextMore"
-            :class="nextMoreKls"
+            :class="[...nextMoreKls, { 'pagerPcDisabled': disabled }]"
             :tabindex="tabindex"
             :aria-label="t('pagination.nextPages', { pager: pagerCount - 2 })"
             @mouseenter="onMouseEnter()"
@@ -69,7 +69,7 @@
         </li>
         <li
             v-if="pageCount > 1"
-            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pageCount}]"
+            :class="['pagerPcNumber',{'pagerPcActivePage' : currentPage === pageCount , 'pagerPcDisabled': disabled }]"
             :aria-current="currentPage === pageCount"
             :aria-label="t('pagination.currentPage', { pager: pageCount })"
             :tabindex="tabindex"
@@ -91,6 +91,7 @@ defineOptions
 })
 
 const props = defineProps(paginationPagerProps)
+const disabled = props.disabled
 const emit = defineEmits(['change'])
 const { t } = useLocale()
 
@@ -278,6 +279,15 @@ function onPagerClick(event: UIEvent) {
     .pagerPcActivePage {
         color: #ffffff;
         background-color: #7d32ea;
+    }
+    .pagerPcDisabled {
+        color: #000000;
+        background-color: #e5e5e5;
+        cursor: not-allowed;
+        &:hover {
+            color: #000000;
+            background-color: #e5e5e5;
+        }
     }
 }
 </style>

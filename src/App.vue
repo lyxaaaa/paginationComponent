@@ -3,7 +3,7 @@
         <NewPagination
             :disabled="false"
             :hideOnSinglePage="false"
-            :simple="true"
+            :simple="false"
             :total="totalItems"
             :page-sizes="opageSizes"
             :current-page="ocurrentPage"
@@ -25,7 +25,7 @@ export default defineComponent({
     },
     data() {
         return {
-            totalItems: 50, // 总条目数
+            totalItems: 500, // 总条目数
             opageSize: 10,    // 每页显示的条目数
             ocurrentPage: 1,  // 当前页
             opageSizes: [10, 20, 30, 50], // 每页显示条目数选项

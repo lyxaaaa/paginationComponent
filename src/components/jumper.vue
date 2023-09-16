@@ -1,5 +1,5 @@
 <template>
-<span class="oPaginationJump" :disabled="disabled">
+<span class="oPaginationJump">
     <span class="jumpPcGoto">{{ t('pagination.goto') }}</span>
     <div class="jumpPcInputBox">
         <div class="jumpPcWrapInput">
@@ -41,9 +41,7 @@ const { pageCount, disabled, currentPage, changeEvent } = usePagination()
 const userInput = ref<number | string>()
 let innerValue = computed(() => userInput.value ?? currentPage?.value)
 
-//用户实时输入触发
 function handleInput(val: number | string) {
-    console.log('***handleInput',val)
     userInput.value = val ? +val : ''
 }
 
@@ -53,6 +51,7 @@ function handleChange(event: Event) {
     changeEvent?.(val)
     const inputElement = event.target as HTMLInputElement;
     inputElement.blur();
+    userInput.value = undefined
 }
 </script>
 
@@ -111,6 +110,10 @@ function handleChange(event: Event) {
                 border: none;
                 background: none;
                 box-sizing: border-box;
+            }
+            .jumpPcInnerInput:disabled {
+                color: #707070;
+                cursor: not-allowed;
             }
             input[type=number] {
                 -moz-appearance: textfield;
