@@ -10,7 +10,6 @@ import {
     PropType
 } from 'vue'
 import { OPaginationKey } from './constants'
-import './test.scss'
 
 //PC端
 import Prev from './components/Prev.vue'
@@ -356,9 +355,10 @@ export const NewPagination = defineComponent({
             return h(
                 'div',
                 {
-                    class: [
-                        'test',
-                    ],
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                    },
                 },
                 rootChildren
             )

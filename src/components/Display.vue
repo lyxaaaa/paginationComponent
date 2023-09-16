@@ -19,6 +19,7 @@ const { disabled, currentPage, pageCount } = usePagination()
 
 <style lang="scss" scoped>
 .oPaginationDisplayPc {
+    color: #000000;
     white-space: nowrap;
     font-size: 14px;
     margin: 0 8px;

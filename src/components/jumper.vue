@@ -64,7 +64,7 @@ function handleChange(event: Event) {
     font-weight: 300;
     line-height: 22px;
     border-radius: 0;
-    margin-left: 24px;
+    margin-left: 16px;
     color: #999999;
     .jumpPcGoto {
         margin-right: 8px;
